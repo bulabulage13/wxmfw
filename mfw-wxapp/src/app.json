@@ -1,0 +1,73 @@
+{
+  "pages": [
+    "pages/home/main",
+    "pages/home_subpage/search_shop/main",
+    "pages/home_subpage/select_address/main",
+    "pages/home_subpage/notice_page/main",
+    "pages/home_subpage/notice_detail/main",
+    "pages/home_subpage/modal_detail_skms/main",
+    "pages/home_subpage/modal_detail_tstg/main",
+    "pages/home_subpage/shop_food_refund/main",
+    "pages/home_subpage/shop_food_order/main",
+    "pages/home_subpage/shop_food_detail/main",
+    "pages/home_subpage/shop_detail_tuan/main",
+    "pages/home_subpage/food_refund_detail/main",
+    "pages/seller/main",
+    "pages/my/main",
+    "pages/my_subpages/personal_data/main",
+    "pages/my_subpages/about_us/main",
+    "pages/my_subpages/about_us_protocol/main",
+    "pages/my_subpages/my_collection/main",
+    "pages/my_subpages/coupon/main",
+    "pages/my_subpages/my_trail/main",
+    "pages/my_subpages/my_trail_first/main",
+    "pages/my_subpages/my_trail_second/main",
+    "pages/my_subpages/receiving_address/main",
+    "pages/my_subpages/receiving_address_add/main",
+    "pages/my_subpages/my_wallet/main",
+    "pages/my_subpages/client_service_center/main",
+    "pages/my_subpages/client_service_center_question/main",
+    "pages/my_subpages/client_service_center_question_detail/main",
+    "pages/my_subpages/bd_login/main",
+    "pages/my_subpages/bd_login_add/main",
+    "pages/my_subpages/bd_login_entering/main",
+    "pages/my_subpages/bd_login_manager/main",
+    "pages/my_subpages/bd_login_register/main",
+    "pages/my_subpages/bd_login_upload_file/main",
+    "pages/my_subpages/bd_login_upload_shop/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "买返屋",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#999",
+    "backgroundColor": "#fff",
+    "selectedColor": "#723AFF",
+    "borderStyle": "white",
+
+    "list": [
+      {
+        "text": "首页",
+        "pagePath": "pages/home/main",
+        "iconPath": "static/tabs/home.png",
+        "selectedIconPath": "static/tabs/home-active.png"
+      },
+      {
+        "text": "买返屋",
+        "pagePath": "pages/seller/main",
+        "iconPath": "static/tabs/mfw.png",
+        "selectedIconPath": "static/tabs/mfw-active.png"
+      },
+      {
+        "text": "个人中心",
+        "pagePath": "pages/my/main",
+        "iconPath": "static/tabs/my.png",
+        "selectedIconPath": "static/tabs/my-active.png"
+      }
+    ],
+    "position": "bottom"
+  }
+}
