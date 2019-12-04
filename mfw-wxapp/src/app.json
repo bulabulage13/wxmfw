@@ -7,9 +7,12 @@
     "pages/home_subpage/notice_detail/main",
     "pages/home_subpage/modal_detail_skms/main",
     "pages/home_subpage/modal_detail_tstg/main",
+    "pages/home_subpage/shop_detail/main",
     "pages/home_subpage/shop_food_refund/main",
     "pages/home_subpage/shop_food_order/main",
     "pages/home_subpage/shop_food_detail/main",
+    "pages/home_subpage/shop_food_detail_wm/main",
+    "pages/home_subpage/shop_food_detail_tg/main",
     "pages/home_subpage/shop_detail_tuan/main",
     "pages/home_subpage/food_refund_detail/main",
     "pages/seller/main",
@@ -34,7 +37,10 @@
     "pages/my_subpages/bd_login_manager/main",
     "pages/my_subpages/bd_login_register/main",
     "pages/my_subpages/bd_login_upload_file/main",
-    "pages/my_subpages/bd_login_upload_shop/main"
+    "pages/my_subpages/bd_login_upload_shop/main",
+    "pages/my_subpages/my_order/main",
+    "pages/my_subpages/my_order_eval_goods/main",
+    "pages/my_subpages/my_order_eval_wm/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

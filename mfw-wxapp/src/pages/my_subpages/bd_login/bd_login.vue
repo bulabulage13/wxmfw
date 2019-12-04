@@ -36,7 +36,7 @@ export default {
   background: #fff;
 }
 .logo {
-  margin-top: 118rpx;
+  margin-top: 236rpx;
   margin-left: 90rpx;
 }
 .logo > img {
@@ -44,8 +44,8 @@ export default {
   height: 80rpx;
   background: #eee;
 }
-.login {
-  margin: 225rpx 90rpx 140rpx;
+.login-input {
+  margin: 414rpx 90rpx 140rpx;
 }
 .job-number {
   margin-bottom: 36rpx;
@@ -66,7 +66,7 @@ input::placeholder {
   font-size: 28rpx;
 }
 .login-btn {
-  margin: 70rpx auto 0;
+  margin: 0 auto;
   width: 336rpx;
   height: 80rpx;
   background: rgba(114, 58, 255, 1);

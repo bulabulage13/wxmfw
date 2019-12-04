@@ -5,7 +5,7 @@
         <img src="../../../static/my/user.png" />
         <span>用户名称</span>
       </div>
-      <div class="set">
+      <div class="set" @tap="goSetPersonData">
         <img src="../../../static/icons/set.png" />
         <span>编辑资料</span>
       </div>
@@ -13,20 +13,20 @@
     <div class="my-goods">
       <header>我的商品</header>
       <div class="my-goods-modals">
-        <div class="my-goods-modal">
+        <div class="my-goods-modal" @tap="goOrderPage">
           <img src="../../../static/my/dfk.png" alt />
           <div>待付款</div>
         </div>
         <div class="my-goods-modal">
-          <img src="../../../static/my/dfk.png" alt />
+          <img src="../../../static/my/dpj.png" alt />
           <div>待评价</div>
         </div>
         <div class="my-goods-modal">
-          <img src="../../../static/my/dfk.png" alt />
+          <img src="../../../static/my/sh.png" alt />
           <div>售后</div>
         </div>
         <div class="my-goods-modal">
-          <img src="../../../static/my/dfk.png" alt />
+          <img src="../../../static/my/qbdd.png" alt />
           <div>全部订单</div>
         </div>
       </div>
@@ -72,37 +72,37 @@ export default {
         },
         {
           name: "客服中心",
-          src: "../../static/my/qb.png",
+          src: "../../static/my/kefzx.png",
           page: "../my_subpages/client_service_center/main"
         },
         {
           name: "关于我们",
-          src: "../../static/my/qb.png",
+          src: "../../static/my/gywm.png",
           page: "../my_subpages/about_us/main"
         },
         {
           name: "我的收藏",
-          src: "../../static/my/qb.png",
+          src: "../../static/my/sc.png",
           page: "../my_subpages/my_collection/main"
         },
         {
           name: "信息采集",
-          src: "../../static/my/qb.png",
+          src: "../../static/my/xxcj.png",
           page: "../my_subpages/bd_login/main"
         },
         {
           name: "我的试用",
-          src: "../../static/my/qb.png",
+          src: "../../static/my/wdsy.png",
           page: "../my_subpages/my_trail/main"
         },
         {
           name: "收货地址",
-          src: "../../static/my/qb.png",
+          src: "../../static/my/shdz.png",
           page: "../my_subpages/receiving_address/main"
         },
         {
           name: "商家入住",
-          src: "../../static/my/qb.png",
+          src: "../../static/my/sjrz.png",
           page: "../my_subpages/bd_login/main"
         }
       ]
@@ -113,7 +113,17 @@ export default {
       let page = this.serviceModals[index].page;
       wx.navigateTo({
         url: page
-      })
+      });
+    },
+    goOrderPage() {
+      wx.navigateTo({
+        url: "../my_subpages/my_order/main"
+      });
+    },
+    goSetPersonData() {
+      wx.navigateTo({
+        url: "../my_subpages/personal_data/main"
+      });
     }
   }
 };

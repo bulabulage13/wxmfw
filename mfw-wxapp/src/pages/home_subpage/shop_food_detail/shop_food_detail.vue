@@ -5,7 +5,7 @@
       <div class="sub">精致双人套餐</div>
     </header>
     <!-- 轮播图 -->
-    <div class="food-imgs">
+    <!-- <div class="food-imgs">
       <swiper @change="handleChange">
         <swiper-item v-for="(img, index) of imgs" :key="index">
           <img src="" :style="{ background: img.background }" />
@@ -18,7 +18,8 @@
           :key="index"
         ></div>
       </div>
-    </div>
+    </div> -->
+    <FoodBanner :imgs="imgs"></FoodBanner>
     <!-- 套餐介绍 -->
     <div class="food-intro">
       <header>套餐包含</header>
@@ -43,7 +44,7 @@
         <header>有效时间 ：</header>
         <div class="use-time_cont">{{ prompt.useTime }}</div>
       </div>
-      <div class="how-use">
+      <div class="how-use"> 
         <header>使用规则：</header>
         <div
           class="how-use_cont"
@@ -92,7 +93,11 @@
 </template>
 
 <script>
+import FoodBanner from '../../../components/food_banner_tpl/food_banner_tpl'
 export default {
+  components: {
+    FoodBanner,
+  },
   data() {
     return {
       imgs: [
@@ -167,13 +172,6 @@ export default {
     });
   },
   methods: {
-    handleChange(e) {
-      let index = e.mp.detail.current;
-      for (var i of this.imgs) {
-        i.isSelect = false;
-      }
-      this.imgs[index].isSelect = true;
-    },
     goFoodOrder() {
       wx.navigateTo({
         url: "../shop_food_order/main"
@@ -202,48 +200,7 @@ export default {
   font-weight: bottom;
   color: rgba(53, 53, 53, 1);
 }
-/* 轮播 */
-.food-imgs {
-  height: 670rpx;
-  width: 670rpx;
-  margin-top: 30rpx;
-  margin-bottom: 30rpx;
-  position: relative;
-}
-swiper {
-  width: 100%;
-  height: 100%;
-}
 
-swiper-item > img {
-  width: 100%;
-  min-height: 100%;
-  max-height: 100%;
-  /* background: #000000; */
-}
-.dots {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  bottom: 20rpx;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.dot {
-  width: 10rpx;
-  height: 10rpx;
-  border-radius: 50%;
-  background: #efefef;
-  margin-right: 4rpx;
-}
-.dot-active {
-  width: 30rpx;
-  height: 10rpx;
-  background: #723aff;
-  border-radius: 16rpx;
-  margin-right: 4rpx;
-}
 /* 套餐，提示，介绍 */
 .food-intro > header,
 .prompt > header,

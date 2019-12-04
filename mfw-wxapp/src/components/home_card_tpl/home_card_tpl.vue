@@ -1,6 +1,6 @@
 <template>
   <div class="shop-list">
-    <div class="shop-card" v-for="(item, index) of shops" :key="index">
+    <div class="shop-card" v-for="(item, index) of shops" :key="index" @tap="goShopDetailPage">
       <div class="shop-title">
         <h3 class="shop-name">{{item.name}}</h3>
         <div class="shop-type">{{item.type == 1 ? '外':'团'}}</div>
@@ -35,7 +35,15 @@
 
 <script>
 export default {
-  props: ["shops"]
+  props: ["shops"],
+  methods: {
+    goShopDetailPage() {
+      console.log(1);
+      wx.navigateTo({
+        url: '../../pages/home_subpage/shop_detail/main'
+      })
+    },
+  },
 };
 </script>
 

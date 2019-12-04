@@ -10,7 +10,7 @@
             @tap="uploadImg(index)"
           >
             <div class="upload-item_before" v-if="!m.isUpload">
-              <img src="" alt="" />
+              <img src="../../../../static/icons/camera.png"/>
               <div class="name">{{ m.name }}</div>
             </div>
             <div class="upload-item_after" v-if="m.isUpload">
@@ -110,10 +110,9 @@ export default {
   justify-content: center;
 }
 .upload-item_before > img {
-  width: 21rpx;
-  height: 21rpx;
+  width: 42rpx;
+  height: 42rpx;
   margin-bottom: 12rpx;
-  background: #eee;
 }
 .name {
   font-size: 22rpx;
