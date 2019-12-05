@@ -22,7 +22,7 @@
         </div>
         <div class="home-operate-search" @tap="goSearchPage">
           <img class="icon-search" src="../../../static/icons/search.png"/>
-          <input type="text" placeholder="搜索商家、商品" readonly />
+          <input type="text" placeholder="搜索商家、商品" disabled="true" />
         </div>
         <div class="home-operate-notice" @tap="goNoticePage">
           <img class="icon-notice" src="../../../static/icons/notice.png" alt />

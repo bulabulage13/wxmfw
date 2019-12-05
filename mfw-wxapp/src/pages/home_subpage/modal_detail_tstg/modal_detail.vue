@@ -24,12 +24,9 @@
         </div>
       </div>
       <!-- 筛选内容 -->
-      <div
-        class="filter-content"
-        v-if="isAll || isNearby || isSort || isFilter"
-      >
+      <div class="filter-content" v-if="contentShow">
         <!-- 全部 -->
-        <div class="filter-content_all" v-if="isAll">
+        <div class="filter-content_all" v-if="filters[0].contShow">
           <div
             :class="!kind.isSelect ? 'all-item' : 'all-item-active'"
             v-for="(kind, index) of foodKinds"
@@ -40,13 +37,14 @@
           </div>
         </div>
         <!-- 附近 -->
-        <div class="filter-content_nearby" v-if="isNearby">
+        <div class="filter-content_nearby" v-if="filters[1].contShow">
           <div class="nearby-item_left">
             <div
               class="nearby-item"
               :class="f.isSelect ? 'nearby-item-active' : ''"
               v-for="(f, index) of nearbys"
               :key="index"
+              @tap="selectNearbys(index)"
             >
               {{ f.name }}
             </div>
@@ -57,13 +55,14 @@
               :class="f.isSelect ? 'nearby-item-active' : ''"
               v-for="(f, index) of distances"
               :key="index"
+              @tap="selectNearbysDistance(index)"
             >
               {{ f.name }}
             </div>
           </div>
         </div>
         <!-- 智能排序 -->
-        <div class="filter-content_sort" v-if="isSort">
+        <div class="filter-content_sort" v-if="filters[2].contShow">
           <div
             class="sort-item"
             :class="!kind.isSelect ? 'sort-item' : 'sort-item-active'"
@@ -75,55 +74,79 @@
           </div>
         </div>
         <!-- 筛选 -->
-        <div class="filter-content_filter" v-if="isFilter">
+        <div class="filter-content_filter" v-if="filters[3].contShow">
           <div class="filter-mul">
             <header>用餐人数</header>
             <div class="filter-mul-list">
-              <div class="filter-mul-item"></div>
+              <div
+                class="filter-mul-item"
+                :class="p.isSelect ? 'filter-mul-item-active' : ''"
+                v-for="(p, index) of persons"
+                :key="index"
+                @tap="personSelect(index)"
+              >
+                {{ p.text }}
+              </div>
             </div>
           </div>
           <div class="filter-mul">
             <header>餐厅服务</header>
             <div class="filter-mul-list">
-              <div class="filter-mul-item"></div>
+              <div
+                class="filter-mul-item"
+                :class="t.isSelect && 'filter-mul-item-active'"
+                v-for="(t, index) of types"
+                :key="index"
+                @tap="typeSelect(index)"
+              >
+                {{ t.text }}
+              </div>
             </div>
           </div>
           <div class="filter-btns">
-            <div class="filter-btn clear">清空</div>
-            <div class="filter-btn success">完成<span>2</span></div>
+            <div class="filter-btn clear" @tap="clearSel">清空</div>
+            <div class="filter-btn success">
+              <div>完成</div>
+              <div class="count" v-if="count">{{ count }}</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <!-- 商铺列表 -->
     <div class="shop-list" :class="isShow ? 'mt' : ''">
-      <div class="shop-card" @tap="goShopDetail">
+      <div
+        class="shop-card"
+        @tap="goShopDetail"
+        v-for="(s, index) of shops"
+        :key="index"
+      >
         <div class="img-box">
           <img src="../../../../static/home/qxc.png" alt="" />
         </div>
         <div class="shop-box">
           <div class="shop-info">
-            <div class="shop-name">店铺名称</div>
-            <div class="shop-type w">类型</div>
+            <div class="shop-name">{{ s.name }}</div>
+            <div class="shop-type w">外</div>
           </div>
           <div class="shop-info">
             <div class="shop-more">
               <div class="shop-level">
                 <img src="../../../../static/icons/star.png" alt="" />
-                <span>4.4</span>
+                <span>{{ s.star }}</span>
               </div>
-              <div class="shop-price">￥20/人</div>
+              <div class="shop-price">￥{{ s.price }}/人</div>
             </div>
-            <div class="shop-distance">2.9km</div>
+            <div class="shop-distance">{{ s.distance }}km</div>
           </div>
           <div class="shop-info-loc">
-            <div class="shop-loc">北进街</div>
+            <div class="shop-loc">{{ s.location }}</div>
             <div class="shop-class">快餐</div>
           </div>
           <div class="shop-foods">
             <div class="shop-type t">团</div>
             <div class="shop-foods-list">
-              烧鸭粉套餐；柠檬鸭粉套餐；鸭血汤套餐鸭血汤套餐鸭血汤套餐
+              {{ s.content }}
             </div>
           </div>
         </div>
@@ -173,7 +196,6 @@ export default {
           icon: "../../../static/icons/filter.png",
           id: "4",
           isSelect: false,
-          haveChild: true,
           contShow: false
         }
       ],
@@ -230,11 +252,85 @@ export default {
         { name: "500m", isSelect: false },
         { name: "500m", isSelect: false }
       ],
-      isAll: false,
-      isNearby: false,
-      isSort: false,
-      isFilter: false,
-      fbTop: 0
+      persons: [
+        { text: "单人餐", isSelect: false },
+        { text: "双人餐", isSelect: false },
+        { text: "3-4餐", isSelect: false },
+        { text: "5-10餐", isSelect: false },
+        { text: "10人以上", isSelect: false }
+      ],
+      types: [
+        { text: "外卖送餐", isSelect: false },
+        { text: "自动取餐", isSelect: false }
+      ],
+      count: 0,
+      contentShow: false,
+      fbTop: 0,
+      shops: [
+        {
+          img: "",
+          name: "南鸭榜(青秀万达公馆店)",
+          star: 4.4,
+          price: 20,
+          location: "东葛路",
+          content: "什么什么什么什么什么什么神儿么神儿么社呢",
+          distance: "2.3"
+        },
+        {
+          img: "",
+          name: "南鸭榜(青秀万达公馆店)",
+          star: 4.4,
+          price: 20,
+          location: "东葛路",
+          content: "什么什么什么什么什么什么神儿么神儿么社呢",
+          distance: "2.3"
+        },
+        {
+          img: "",
+          name: "南鸭榜(青秀万达公馆店)",
+          star: 4.4,
+          price: 20,
+          location: "东葛路",
+          content: "什么什么什么什么什么什么神儿么神儿么社呢",
+          distance: "2.3"
+        },
+        {
+          img: "",
+          name: "南鸭榜(青秀万达公馆店)",
+          star: 4.4,
+          price: 20,
+          location: "东葛路",
+          content: "什么什么什么什么什么什么神儿么神儿么社呢",
+          distance: "2.3"
+        },
+        {
+          img: "",
+          name: "南鸭榜(青秀万达公馆店)",
+          star: 4.4,
+          price: 20,
+          location: "东葛路",
+          content: "什么什么什么什么什么什么神儿么神儿么社呢",
+          distance: "2.3"
+        },
+        {
+          img: "",
+          name: "南鸭榜(青秀万达公馆店)",
+          star: 4.4,
+          price: 20,
+          location: "东葛路",
+          content: "什么什么什么什么什么什么神儿么神儿么社呢",
+          distance: "2.3"
+        },
+        {
+          img: "",
+          name: "南鸭榜(青秀万达公馆店)",
+          star: 4.4,
+          price: 20,
+          location: "东葛路",
+          content: "什么什么什么什么什么什么神儿么神儿么社呢",
+          distance: "2.3"
+        }
+      ]
     };
   },
   mounted() {
@@ -243,7 +339,6 @@ export default {
     query
       .select("#filterBox")
       .boundingClientRect(res => {
-        console.log("元素距离======>" + res.top);
         self.fbTop = res.top;
       })
       .exec();
@@ -251,8 +346,6 @@ export default {
   onPageScroll(e) {
     let self = this;
     let top = this.fbTop;
-    console.log("页面滚动距离======>" + Math.floor(e.scrollTop));
-    console.log(this.fbTop);
     if (e.scrollTop >= top - 48) {
       this.isShow = true;
     } else {
@@ -269,40 +362,27 @@ export default {
         selector: "#filterBox",
         success(res) {
           console.log("list调用成功=====>");
-          console.log(res);
         },
         fail() {
           console.log("调用失败====>");
         }
       });
-
-      if (index == 0) {
-        this.isAll = true;
-        this.isNearby = false;
-        this.isSort = false;
-        this.isFilter = false;
-      } else if (index == 1) {
-        this.isNearby = true;
-        this.isAll = false;
-        this.isSort = false;
-        this.isFilter = false;
-      } else if (index == 2) {
-        this.isSort = true;
-        this.isAll = false;
-        this.isNearby = false;
-        this.isFilter = false;
-      } else if (index == 3) {
-        this.isFilter = true;
-        this.isAll = false;
-        this.isNearby = false;
-        this.isSort = false;
+      if (this.filters[index].contShow) {
+        for (var i of this.filters) {
+          i.isSelect = false;
+          i.contShow = false;
+        }
+        this.contentShow = false;
+        this.filters[index].isSelect = true;
+      } else {
+        for (var i of this.filters) {
+          i.isSelect = false;
+          i.contShow = false;
+        }
+        this.filters[index].isSelect = true;
+        this.filters[index].contShow = true;
+        this.contentShow = true;
       }
-
-      for (var i of this.filters) {
-        i.isSelect = false;
-      }
-      this.filters[index].isSelect = true;
-      // this.isShow = true;
     },
     selectFoodKind(index) {
       for (let i of this.foodKinds) {
@@ -310,8 +390,8 @@ export default {
       }
       this.foodKinds[index].isSelect = true;
       this.filters[0].name = this.foodKinds[index].name;
-      // this.isShow = false;
-      this.isAll = false;
+      this.filters[0].contShow = false;
+      this.contentShow = false;
     },
     selectSortKind(index) {
       for (let i of this.sortKinds) {
@@ -319,14 +399,72 @@ export default {
       }
       this.sortKinds[index].isSelect = true;
       this.filters[2].name = this.sortKinds[index].name;
-      this.isSort = false;
+      this.filters[2].contShow = false;
+      this.contentShow = false;
     },
-    goShopDetail(index){
-      console.log(1);
+    selectNearbys(index) {
+      for (let n of this.nearbys) {
+        n.isSelect = false;
+      }
+      this.nearbys[index].isSelect = true;
+    },
+    selectNearbysDistance(index) {
+      for (let d of this.distances) {
+        d.isSelect = false;
+      }
+      this.distances[index].isSelect = true;
+      this.filters[1].contShow = false;
+      this.contentShow = false;
+    },
+    goShopDetail(index) {
       wx.navigateTo({
-        url: '../shop_detail_tuan/main'
-      })
+        url: "../shop_detail_tuan/main"
+      });
+    },
+    personSelect(index) {
+      if (!this.persons[index].isSelect) {
+        for (let p of this.persons) {
+          p.isSelect = false;
+        }
+        this.persons[index].isSelect = true;
+        this.getSelCount();
+      }
+    },
+    typeSelect(index) {
+      if (!this.types[index].isSelect) {
+        for (let t of this.types) {
+          t.isSelect = false;
+        }
+        this.types[index].isSelect = true;
+        this.getSelCount();
+      }
+    },
+    getSelCount() {
+      let count = 0;
+      for (let t of this.types) {
+        if (t.isSelect) {
+          count++;
+        }
+      }
+      for (let p of this.persons) {
+        if (p.isSelect) {
+          count++;
+        }
+      }
+      this.count = count;
+    },
+    clearSel() {
+      for (let t of this.types) {
+        t.isSelect = false;
+      }
+      for (let p of this.persons) {
+        p.isSelect = false;
+      }
+      this.count = 0;
     }
+  },
+  watch: {
+    data(newValue, oldValue) {}
   }
 };
 </script>
@@ -337,7 +475,7 @@ export default {
 }
 .banner {
   margin-top: 96rpx;
-  margin-bottom: 30rpx;
+  /* margin-bottom: 30rpx; */
 }
 .filter-view-fixed {
   position: fixed;
@@ -349,7 +487,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24rpx 40rpx;
+  padding: 32rpx 40rpx;
   background: #fff;
 }
 .filter-item,
@@ -369,18 +507,19 @@ export default {
 }
 .filter-item-active > span {
   font-size: 26rpx;
+  font-weight: bold;
   color: #353535;
 }
 /* 过滤框 */
 .filter-content {
   position: fixed;
-  top: 80rpx;
+  top: 96rpx;
   left: 0;
   right: 0;
   bottom: 0;
   background: rgba(53, 53, 53, 0.5);
   z-index: 9;
-  border-top: 2rpx solid #b2b2b2;
+  border-top: 2rpx solid #dcdcdc;
 }
 /* 全部美食和智能筛选*/
 .all-item,
@@ -426,11 +565,12 @@ export default {
   width: 140rpx;
   height: 40rpx;
   line-height: 40rpx;
+  text-align: center;
   background: #d2d2d2;
   border-radius: 10px;
   font-size: 26rpx;
   color: #353535;
-  margin-right: 32rpx;
+  margin-right: 26rpx;
   margin-bottom: 26rpx;
 }
 .filter-mul-item-active {
@@ -454,18 +594,32 @@ export default {
 .success {
   background: #723aff;
   color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.count {
+  width: 24rpx;
+  height: 24rpx;
+  background: #ffab3a;
+  font-size: 24rpx;
+  text-align: center;
+  line-height: 24rpx;
+  color: #fff;
+  margin-left: 10rpx;
+  border-radius: 50%;
 }
 /* 商铺 */
 .mt {
-  margin-top: 30rpx;
+  margin-top: 100rpx;
 }
 
 .shop-card {
   display: flex;
-  align-items: center;
-  padding: 40rpx 0;
-  margin: 0 44rpx;
-  border-bottom: 2rpx solid #b2b2b2;
+  align-items: flex-start;
+  padding-bottom: 40rpx;
+  margin: 0 40rpx 32rpx;
+  border-bottom: 2rpx solid #f8f4f4;
   box-sizing: border-box;
 }
 .img-box {
@@ -494,6 +648,7 @@ export default {
   display: flex;
   align-items: center;
   margin-bottom: 10rpx;
+  font-size: 26rpx;
 }
 .shop-more {
   display: flex;
@@ -516,9 +671,7 @@ export default {
 }
 .shop-level span,
 .shop-price,
-.shop-distance,
-.shop-loc,
-.shop-class {
+.shop-distance {
   font-size: 22rpx;
   color: #353535;
 }

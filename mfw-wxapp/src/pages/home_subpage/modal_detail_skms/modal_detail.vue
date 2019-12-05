@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <SearchInputTpl :placeholder="placeholder" />
-    <div class="box" :class="isScroll ? 'off' : ''">
+    <div class="box">
       <!-- 宣传店 -->
-      <div class="top-card" v-if="isCardShow">
+      <div class="top-card">
         <div class="shop-top">
           <div class="shop-detail">
             <div class="shop-logo">
@@ -70,7 +70,7 @@
           >
             <label
               class="filter-txt"
-              :class="f.isSelect ? 'filter-txt-actice' : ''"
+              :class="f.isSelect ? 'filter-txt-active' : ''"
               >{{ f.name }}<img v-if="f.icon" :src="f.icon"
             /></label>
           </div>
@@ -138,11 +138,11 @@
           </div>
         </div>
       </div>
-    </div>
-    <!-- 店铺列表 -->
-    <div :class="isScroll ? 'shop-list-wrapper' : ''">
-      <div class="shop-list" :class="!isCardShow ? 'mt' : ''">
-        <SellerCardTpl :cards="cards" />
+      <!-- 店铺列表 -->
+      <div :class="isWrapper ? 'shop-list-wrapper' : ''">
+        <div class="shop-list" :class="searchBarFixed ? 'mt' : ''">
+          <SellerCardTpl :cards="cards" />
+        </div>
       </div>
     </div>
   </div>
@@ -157,13 +157,19 @@ export default {
     SellerCardTpl
   },
   mounted() {
+    let query = wx.createSelectorQuery();
     let self = this;
-    wx.getSystemInfo({
-      success(res) {
-        console.log(res);
-        self.screenHeight = res.screenHeight;
-      }
-    });
+    query
+      .select("#filterBox")
+      .boundingClientRect(res => {
+        //获取元素1距离页面顶部高度
+        self.top = res.top;
+      })
+      .exec();
+  },
+  onLoad() {
+    // 解决页面返回后，数据没重置的问题
+    Object.assign(this, this.$options.data());
   },
   data() {
     return {
@@ -172,10 +178,8 @@ export default {
       mulSortSel: false,
       count: 0,
       searchBarFixed: false,
-      screenHeight: 0,
-      isScroll: false,
-      isShow: true,
-      isCardShow: true,
+      top: 0,
+      isWrapper: false,
       cards: [
         {
           logo: "",
@@ -970,84 +974,58 @@ export default {
     };
   },
   onPageScroll(e) {
-    let query = wx.createSelectorQuery();
-    let self = this;
-    query
-      .select("#filterBox")
-      .boundingClientRect(res => {
-        //获取元素1距离页面顶部高度
-        console.log("页面滚动距离======>" + Math.floor(e.scrollTop));
-        console.log("元素滚动距离======>" + res.top);
-        if (res.top <= 0 && e.scrollTop >= 308) {
-          self.searchBarFixed = true;
-          self.isShow = false;
-          self.isCardShow = false;
-        } else if (e.scrollTop <= 315 && e.scrollTop >= 60) {
-          self.searchBarFixed = false;
-          self.isShow = true;
-        }
-      })
-      .exec();
-    console.log(this.searchBarFixed);
+    let top = this.top;
+    if (e.scrollTop >= top - 48) {
+      this.searchBarFixed = true;
+    } else {
+      this.searchBarFixed = false;
+    }
   },
   methods: {
     selectFoodKind(index) {
-      console.log(index);
-      for (var f of this.foodKinds) {
-        f.isSelect = false;
+      if (!this.foodKinds[index].isSelect) {
+        for (var f of this.foodKinds) {
+          f.isSelect = false;
+        }
+        this.foodKinds[index].isSelect = true;
       }
-      this.foodKinds[index].isSelect = true;
     },
     selectFilter(index) {
-      this.isCardShow = false;
-      this.searchBarFixed = true;
-      this.isShow = false;
       for (var f of this.filters) {
         f.isSelect = false;
       }
-      if (!this.filters[index].isSelect) {
-        this.filters[index].isSelect = true;
+      this.filters[index].isSelect = true;
+      console.log(this.searchBarFixed);
+      if (!this.searchBarFixed) {
+        this.searchBarFixed = true;
+        wx.pageScrollTo({
+          height: 0,
+          selector: "#filterBox",
+          success(res) {},
+          fail() {}
+        });
       }
-
       if (index == 0) {
         this.sortSel = !this.sortSel;
         this.mulSortSel = false;
-        if (this.isScroll) {
-          this.isScroll = false;
-        } else {
-          this.isScroll = true;
-        }
-        console.log("页面溢出隐藏====>" + this.isScroll);
-        wx.pageScrollTo({
-          height: 300,
-          selector: ".shop-list",
-          success(res) {
-            console.log("list调用成功=====>");
-            console.log(res);
-          },
-          fail() {
-            console.log("调用失败====>");
-          }
-        });
+        this.isWrapper = this.sortSel;
       } else if (index == 4) {
         this.sortSel = false;
         this.mulSortSel = !this.mulSortSel;
-        this.isScroll = true;
+        this.isWrapper = this.mulSortSel;
       } else {
         this.sortSel = false;
         this.mulSortSel = false;
       }
     },
     selectSort(index) {
-      console.log(index);
-
       for (var f of this.sort) {
         f.isSelect = false;
       }
       if (!this.sort[index].isSelect) {
         this.sort[index].isSelect = true;
         this.filters[0].name = this.sort[index].name;
-        this.isScroll = false;
+        this.isWrapper = false;
       }
       this.sortSel = false;
     },
@@ -1056,6 +1034,7 @@ export default {
     },
     selectAMulItem(index) {
       this.activity[index].isSelect = !this.activity[index].isSelect;
+      this.isWrapper = false;
     },
     selectPitem(index) {
       console.log(index);
@@ -1098,10 +1077,6 @@ export default {
 </script>
 
 <style scoped>
-.off {
-  height: 100%;
-  overflow: hidden;
-}
 .box {
   display: flex;
   flex-direction: column;
@@ -1271,8 +1246,9 @@ export default {
   width: 24rpx;
   height: 24rpx;
 }
-.filter-txt-actice {
+.filter-txt-active {
   color: #353535;
+  font-weight: bold;
 }
 .all-filter-content {
   background: rgba(0, 0, 0, 0.55);
@@ -1365,7 +1341,7 @@ export default {
   z-index: 1;
 }
 .mt {
-  margin-top: 760rpx;
+  padding-top: 200rpx;
 }
 .shop-list-wrapper {
   background: rgba(0, 0, 0, 0.55);
