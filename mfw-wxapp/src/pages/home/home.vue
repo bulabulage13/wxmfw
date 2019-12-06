@@ -55,6 +55,7 @@ import homeModalsTpl from "../../components/home_modals_tpl/home_modals_tpl.vue"
 import homePreferenceTpl from "../../components/home_preference_tpl/home_preference_tpl.vue";
 import homeCardTpl from "../../components/home_card_tpl/home_card_tpl.vue";
 import homeSearchShop from "../../components/home_seach_shop_tpl/home_seach_shop_tpl.vue";
+
 export default {
   components: {
     homeBannerTpl,
@@ -62,6 +63,14 @@ export default {
     homePreferenceTpl,
     homeCardTpl,
     homeSearchShop
+  },
+  beforeMount(){
+    console.log(this.$fly)
+    this.$fly.get('http://127.0.0.1:3000').then(res=>{
+      console.log(res)
+    }).catch(err=>{
+      console.log(err)
+    });
   },
   data() {
     return {
