@@ -15,6 +15,8 @@
     "pages/home_subpage/shop_food_detail_tg/main",
     "pages/home_subpage/shop_detail_tuan/main",
     "pages/home_subpage/food_refund_detail/main",
+    "pages/home_subpage/order_payment/main",
+    "pages/home_subpage/order_payment_attach/main",
     "pages/seller/main",
     "pages/my/main",
     "pages/my_subpages/personal_data/main",

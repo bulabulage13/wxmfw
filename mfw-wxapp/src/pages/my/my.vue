@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <div class="userinfo">
-      <div class="user">
-        <img src="../../../static/my/user.png" />
-        <span>用户名称</span>
+      <div class="user" @tap="goGetUserInfoPage">
+        <img :src="isLogin ? '' : '../../../static/my/user.png'" />
+        <span>{{ isLogin ? "用户名称" : "登录/注册" }}</span>
       </div>
-      <div class="set" @tap="goSetPersonData">
+      <div class="set" v-if="isLogin" @tap="goSetPersonData">
         <img src="../../../static/icons/set.png" />
         <span>编辑资料</span>
       </div>
@@ -61,6 +61,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -108,7 +109,69 @@ export default {
       ]
     };
   },
+  beforeMount() {
+    // console.log(this.$store.state.isLogin)
+    console.log(this.isLogin);
+  },
+  computed: {
+    ...mapGetters(["isLogin"])
+  },
   methods: {
+    goGetUserInfoPage() {
+      let self = this;
+      let appId = "wx579653893a42166a";
+      let secret = "9184547d7ad46c9b6c97a6a4938a1f70";
+      let openid = "";
+      wx.login({
+        success(res) {
+          console.log(res);
+          if (res.code) {
+            let url =
+              "https://api.weixin.qq.com/sns/jscode2session?appid=" +
+              appId +
+              "&secret=" +
+              secret +
+              "&js_code=" +
+              res.code +
+              "&grant_type=authorization_code";
+            self.$fly
+              .get(url)
+              .then(res => {
+                console.log(res);
+                openid = res.openid;
+                wx.getSetting({
+                  success(res) {
+                    console.log('get setting ----->' + JSON.stringify(res));
+                    if (!res.authSetting["scope.userInfo"]) {
+                      wx.authorize({
+                        scope: "scope.userinfo",
+                        success(res) {
+                          console.log("get user info ---------->" + res);
+                        }
+                      });
+                    }
+                  }
+                });
+              })
+              .catch(err => {
+                console.log(err);
+              });
+
+            // wx.getUserInfo({
+            //   success(res) {}
+            // });
+          }
+        }
+      });
+      wx.checkSession({
+        success(res) {
+          console.log(res);
+        },
+        fail(err) {
+          console.log(err);
+        }
+      });
+    },
     goModalPage(index) {
       let page = this.serviceModals[index].page;
       wx.navigateTo({
@@ -156,17 +219,21 @@ export default {
    background: #723aff;
 }
 .user {
+  flex: 1;
   z-index: 99;
   display: flex;
   align-items: center;
 }
-.user img {
+.user > img {
   width: 120rpx;
   height: 120rpx;
   border-radius: 50%;
   margin-right: 28rpx;
+  background: #fff;
+  flex-shrink: 0;
 }
 .user > span {
+  flex: 1;
   font-size: 36rpx;
   color: #ffffff;
 }

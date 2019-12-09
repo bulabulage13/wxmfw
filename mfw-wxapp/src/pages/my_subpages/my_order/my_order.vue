@@ -47,7 +47,7 @@
             订单将于 <span>{{ g.orderTimes }}分钟</span>后自动关闭
           </div>
           <div class="order-btns">
-            <div class="btns btn-purple" v-if="g.state == 1">继续支付</div>
+            <div class="btns btn-purple" v-if="g.state == 1" @tap="goPaymentPage">继续支付</div>
             <div class="btns" v-if="g.state == 1">取消订单</div>
             <div
               class="btns btn-purple"
@@ -416,6 +416,11 @@ export default {
       wx.navigateTo({
         url: "../my_order_eval_wm/main"
       });
+    },
+    goPaymentPage(){
+      wx.navigateTo({
+        url: '../../home_subpage/order_payment/main'
+      })
     }
   }
 };

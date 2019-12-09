@@ -7,21 +7,25 @@
           v-for="(tab, index) of tabs"
           :key="index"
           class="home-tapbar-txt"
-          :class="{'home-tapbar-active': tab.isTab}"
+          :class="{ 'home-tapbar-active': tab.isTab }"
         >
-          <span class="home-tabbar-name">{{tab.name}}</span>
+          <span class="home-tabbar-name">{{ tab.name }}</span>
           <i class="underline"></i>
         </div>
       </div>
       <!-- 导航栏 -->
       <div class="home-operate">
         <div class="home-operate-location" @tap="goSelectAddrPage">
-          <img class="icon-locations" src="../../../static/icons/location.png" alt />
+          <img
+            class="icon-locations"
+            src="../../../static/icons/location.png"
+            alt
+          />
           <span>东京大学</span>
           <img class="icon-down" src="../../../static/icons/down.png" alt />
         </div>
         <div class="home-operate-search" @tap="goSearchPage">
-          <img class="icon-search" src="../../../static/icons/search.png"/>
+          <img class="icon-search" src="../../../static/icons/search.png" />
           <input type="text" placeholder="搜索商家、商品" disabled="true" />
         </div>
         <div class="home-operate-notice" @tap="goNoticePage">
@@ -35,7 +39,7 @@
       <!-- 广告图 -->
       <homeBannerTpl :bannerUrl="bannerUrl" />
       <!-- grid -->
-      <homeModalsTpl :modals="modals" @change="handlerClick"/>
+      <homeModalsTpl :modals="modals" @change="handlerClick" />
       <!-- 优选 -->
       <homePreferenceTpl :preferences="preferences" />
       <!-- 广告 -->
@@ -50,6 +54,7 @@
 </template>
 
 <script>
+import path from "../../utils/serverConfig";
 import homeBannerTpl from "../../components/home_banner_tpl/home_banner_tpl.vue";
 import homeModalsTpl from "../../components/home_modals_tpl/home_modals_tpl.vue";
 import homePreferenceTpl from "../../components/home_preference_tpl/home_preference_tpl.vue";
@@ -64,13 +69,17 @@ export default {
     homeCardTpl,
     homeSearchShop
   },
-  beforeMount(){
-    console.log(this.$fly)
-    this.$fly.get('http://127.0.0.1:3000').then(res=>{
-      console.log(res)
-    }).catch(err=>{
-      console.log(err)
-    });
+  beforeMount() {
+    console.log(path);
+    console.log(this.$fly);
+    this.$fly
+      .get(path.getIndexAd)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
   data() {
     return {
@@ -81,16 +90,16 @@ export default {
       ],
       isShow: false,
       modals: [
-        { name: "堂食团购", url: "../../static/home/tstg.png",id:0},
-        { name: "爽口美食", url: "../../static/home/skms.png",id:1},
-        { name: "夏季饮品", url: "../../static/home/xjyp.png",id:2},
-        { name: "米粉面食", url: "../../static/home/mfms.png",id:3},
-        { name: "甜品糕点", url: "../../static/home/tpgd.png",id:4},
-        { name: "快餐便当", url: "../../static/home/kcbd.png",id:5},
-        { name: "披萨意面", url: "../../static/home/psym.png",id:6},
-        { name: "精致西餐", url: "../../static/home/jzxc.png",id:7},
-        { name: "便利超市", url: "../../static/home/blcs.png",id:8},
-        { name: "附近更多", url: "../../static/home/fjgd.png",id:9}
+        { name: "堂食团购", url: "../../static/home/tstg.png", id: 0 },
+        { name: "爽口美食", url: "../../static/home/skms.png", id: 1 },
+        { name: "夏季饮品", url: "../../static/home/xjyp.png", id: 2 },
+        { name: "米粉面食", url: "../../static/home/mfms.png", id: 3 },
+        { name: "甜品糕点", url: "../../static/home/tpgd.png", id: 4 },
+        { name: "快餐便当", url: "../../static/home/kcbd.png", id: 5 },
+        { name: "披萨意面", url: "../../static/home/psym.png", id: 6 },
+        { name: "精致西餐", url: "../../static/home/jzxc.png", id: 7 },
+        { name: "便利超市", url: "../../static/home/blcs.png", id: 8 },
+        { name: "附近更多", url: "../../static/home/fjgd.png", id: 9 }
       ],
       preferences: [
         {
@@ -422,9 +431,9 @@ export default {
         url: "../home_subpage/notice_page/main"
       });
     },
-    goShopDetail(index){
+    goShopDetail(index) {
       let type = this.shops[index].type;
-      if(type == 0){
+      if (type == 0) {
         // wx.navigateTo({
         //   url: ''
         // });
