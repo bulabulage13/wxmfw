@@ -6,62 +6,37 @@
     <button
       open-type="getUserInfo"
       hover-class="none"
-      bindgetuserinfo="getUserInfoFun"
+      @getuserinfo="getUserInfoFun"
+      type="primary"
+      size="defualt"
+      lang="zh_CN"
     >
-      维修授权用户信息
+      微信授权用户信息
     </button>
   </div>
 </template>
 
 <script>
 export default {
+  onShow() {
+    if (wx.getStorageSync("isUserInfo")) {
+      wx.navigateBack({
+        delta: 1
+      });
+    }
+  },
   methods: {
     getUserInfoFun() {
       wx.getUserInfo({
         lang: "zh_CN",
         success(res) {
-          wx.showLoading({
-            title: "加载中..."
-          });
-          wx.login({
-            success(res) {
-              console.log(res);
-              let code = res.code;
-              let options = {
-                url: "users/login",
-                data: {
-                  iv: iv,
-                  encryptedData: encryptedData,
-                  shIds: wx.getStorageSync("shIds"),
-                  zhHoteld: wx.getStorageSync("zhHoteld"),
-                  code: code
-                },
-                success(data) {
-                  wx.showToast({
-                    title: "授权成功",
-                    icon: "success"
-                  });
-                  app.globalData.isLogin = true;
-                  wx.setStorageSync("token", data.authorization);
-                  wx.setStorageSync("userIds", data.userIds);
-                  self.callback();
-                },
-                warn() {
-                  wx.hideLoading();
-                  wx.showModal({
-                    title: "提示",
-                    content: "授权失败，请重新点击并授权",
-                    showCancel: false,
-                    confirmColor: "#019283"
-                  });
-                }
-              };
-              hdAjax(options);
-            }
+          wx.setStorageSync("isUserInfo", true);
+          wx.setStorageSync("userInfo", JSON.parse(res.rawData));
+          wx.navigateTo({
+            url: "../get_user_phone/main"
           });
         },
         fail(err) {
-          console.log(err);
           wx.showModal({
             title: "提示",
             content: "需要通过授权才能继续，请重新点击并授权",
@@ -83,16 +58,24 @@ export default {
   align-items: center;
 }
 img {
+  margin-top: 180rpx;
   width: 120rpx;
-  height: 120rx;
+  height: 120rpx;
   background: #eee;
 }
 p {
-  font-size: 32rpx;
+  margin-top: 16rpx;
+  margin-bottom: 120rpx;
+  font-size: 28rpx;
   color: #353535;
 }
 span {
   font-size: 22rpx;
   color: #02187a;
+}
+button {
+  margin-top: 10rpx;
+  font-size: 28rpx;
+  width: 90%;
 }
 </style>

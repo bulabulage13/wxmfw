@@ -3,9 +3,9 @@
     <div class="search-top">
       <div class="search">
         <img src="../../../../static/icons/search.png" alt />
-        <input type="text" placeholder="搜索商家、商品" />
+        <input type="text" placeholder="搜索商家、商品" v-model="value"/>
       </div>
-      <label>搜索</label>
+      <label @tap="searchShop">搜索</label>
     </div>
     <div class="hot-search">
       <header>热门搜索</header>
@@ -35,7 +35,29 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data(){
+    return {
+      value: ''
+    }
+  },
+  methods: {
+    searchShop() {
+      let value = this.value;
+      this.$fly
+        .get("getListIndex", {
+          itemName: value,
+          offset: 0,
+          limit: 100,
+          likeStatus: 1
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => console.log(err));
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -88,12 +110,14 @@ export default {};
   align-items: center;
   justify-content: space-between;
 }
-.hot-search ul, .history-search ul {
+.hot-search ul,
+.history-search ul {
   display: flex;
   flex-wrap: wrap;
   padding-left: 3rpx;
 }
-.hot-search ul li, .history-search ul li {
+.hot-search ul li,
+.history-search ul li {
   margin: 16rpx 18rpx 8rpx 0;
   padding: 1rpx 14rpx;
   border: 1px solid #b2b2b2;

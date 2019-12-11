@@ -1,48 +1,56 @@
 {
-  "pages": [
-    "pages/home/main",
-    "pages/home_subpage/search_shop/main",
-    "pages/home_subpage/select_address/main",
-    "pages/home_subpage/notice_page/main",
-    "pages/home_subpage/notice_detail/main",
-    "pages/home_subpage/modal_detail_skms/main",
-    "pages/home_subpage/modal_detail_tstg/main",
-    "pages/home_subpage/shop_detail/main",
-    "pages/home_subpage/shop_food_refund/main",
-    "pages/home_subpage/shop_food_order/main",
-    "pages/home_subpage/shop_food_detail/main",
-    "pages/home_subpage/shop_food_detail_wm/main",
-    "pages/home_subpage/shop_food_detail_tg/main",
-    "pages/home_subpage/shop_detail_tuan/main",
-    "pages/home_subpage/food_refund_detail/main",
-    "pages/home_subpage/order_payment/main",
-    "pages/home_subpage/order_payment_attach/main",
-    "pages/seller/main",
-    "pages/my/main",
-    "pages/my_subpages/personal_data/main",
-    "pages/my_subpages/about_us/main",
-    "pages/my_subpages/about_us_protocol/main",
-    "pages/my_subpages/my_collection/main",
-    "pages/my_subpages/coupon/main",
-    "pages/my_subpages/my_trail/main",
-    "pages/my_subpages/my_trail_first/main",
-    "pages/my_subpages/my_trail_second/main",
-    "pages/my_subpages/receiving_address/main",
-    "pages/my_subpages/receiving_address_add/main",
-    "pages/my_subpages/my_wallet/main",
-    "pages/my_subpages/client_service_center/main",
-    "pages/my_subpages/client_service_center_question/main",
-    "pages/my_subpages/client_service_center_question_detail/main",
-    "pages/my_subpages/bd_login/main",
-    "pages/my_subpages/bd_login_add/main",
-    "pages/my_subpages/bd_login_entering/main",
-    "pages/my_subpages/bd_login_manager/main",
-    "pages/my_subpages/bd_login_register/main",
-    "pages/my_subpages/bd_login_upload_file/main",
-    "pages/my_subpages/bd_login_upload_shop/main",
-    "pages/my_subpages/my_order/main",
-    "pages/my_subpages/my_order_eval_goods/main",
-    "pages/my_subpages/my_order_eval_wm/main"
+  "pages": ["pages/home/main", "pages/seller/main", "pages/my/main"],
+  "subPackages": [
+    {
+      "root": "pages/home_subpage",
+      "pages": [
+        "search_shop/main",
+        "select_address/main",
+        "notice_page/main",
+        "notice_detail/main",
+        "modal_detail_skms/main",
+        "modal_detail_tstg/main",
+        "shop_detail/main",
+        "shop_food_refund/main",
+        "shop_food_order/main",
+        "shop_food_detail/main",
+        "shop_food_detail_wm/main",
+        "shop_food_detail_tg/main",
+        "shop_detail_tuan/main",
+        "food_refund_detail/main",
+        "order_payment/main",
+        "order_payment_attach/main"
+      ]
+    },
+    {
+      "root": "pages/my_subpages",
+      "pages": [
+        "personal_data/main",
+        "about_us/main",
+        "about_us_protocol/main",
+        "my_collection/main",
+        "coupon/main",
+        "my_trail/main",
+        "my_trail_first/main",
+        "my_trail_second/main",
+        "receiving_address/main",
+        "receiving_address_add/main",
+        "my_wallet/main",
+        "client_service_center/main",
+        "client_service_center_question/main",
+        "client_service_center_question_detail/main",
+        "bd_login/main",
+        "bd_login_add/main",
+        "bd_login_entering/main",
+        "bd_login_manager/main",
+        "bd_login_register/main",
+        "bd_login_upload_file/main",
+        "bd_login_upload_shop/main",
+        "my_order/main",
+        "my_order_eval_goods/main",
+        "my_order_eval_wm/main"
+      ]
+    }
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -77,5 +85,10 @@
       }
     ],
     "position": "bottom"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于显示您周围店铺显示"
+    }
   }
 }

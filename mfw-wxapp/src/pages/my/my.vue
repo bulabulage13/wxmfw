@@ -2,10 +2,12 @@
   <div class="container">
     <div class="userinfo">
       <div class="user" @tap="goGetUserInfoPage">
-        <img :src="isLogin ? '' : '../../../static/my/user.png'" />
-        <span>{{ isLogin ? "用户名称" : "登录/注册" }}</span>
+        <img
+          :src="isUserInfo && isUserPhone ? userInfo.avatarUrl : '../../../static/my/user.png'"
+        />
+        <span>{{ isUserInfo && isUserPhone ? userInfo.nickName : "登录/注册" }}</span>
       </div>
-      <div class="set" v-if="isLogin" @tap="goSetPersonData">
+      <div class="set" v-if="isUserInfo && isUserPhone" @tap="goSetPersonData">
         <img src="../../../static/icons/set.png" />
         <span>编辑资料</span>
       </div>
@@ -61,8 +63,12 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 export default {
+  onShow() {
+    this.isUserInfo = wx.getStorageSync("isUserInfo");
+    this.isUserPhone = wx.getStorageSync("isUserPhone");
+    this.userInfo = wx.getStorageSync("userInfo");
+  },
   data() {
     return {
       serviceModals: [
@@ -106,71 +112,28 @@ export default {
           src: "../../static/my/sjrz.png",
           page: "../my_subpages/bd_login/main"
         }
-      ]
+      ],
+      isUserInfo: Boolean,
+      isUserPhone: Boolean,
+      userInfo: {}
     };
   },
-  beforeMount() {
-    // console.log(this.$store.state.isLogin)
-    console.log(this.isLogin);
-  },
-  computed: {
-    ...mapGetters(["isLogin"])
-  },
+  computed: {},
   methods: {
     goGetUserInfoPage() {
-      let self = this;
-      let appId = "wx579653893a42166a";
-      let secret = "9184547d7ad46c9b6c97a6a4938a1f70";
-      let openid = "";
-      wx.login({
-        success(res) {
-          console.log(res);
-          if (res.code) {
-            let url =
-              "https://api.weixin.qq.com/sns/jscode2session?appid=" +
-              appId +
-              "&secret=" +
-              secret +
-              "&js_code=" +
-              res.code +
-              "&grant_type=authorization_code";
-            self.$fly
-              .get(url)
-              .then(res => {
-                console.log(res);
-                openid = res.openid;
-                wx.getSetting({
-                  success(res) {
-                    console.log('get setting ----->' + JSON.stringify(res));
-                    if (!res.authSetting["scope.userInfo"]) {
-                      wx.authorize({
-                        scope: "scope.userinfo",
-                        success(res) {
-                          console.log("get user info ---------->" + res);
-                        }
-                      });
-                    }
-                  }
-                });
-              })
-              .catch(err => {
-                console.log(err);
-              });
-
-            // wx.getUserInfo({
-            //   success(res) {}
-            // });
-          }
-        }
-      });
-      wx.checkSession({
-        success(res) {
-          console.log(res);
-        },
-        fail(err) {
-          console.log(err);
-        }
-      });
+      if (!this.isUserInfo) {
+        console.log("进入用户授权");
+        wx.navigateTo({
+          url: "../get_user_info/main"
+        });
+      } else if (!this.isUserPhone) {
+        console.log("进入手机授权");
+        wx.navigateTo({
+          url: "../get_user_phone/main"
+        });
+      } else {
+        return;
+      }
     },
     goModalPage(index) {
       let page = this.serviceModals[index].page;

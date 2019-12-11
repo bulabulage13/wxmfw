@@ -21,7 +21,7 @@
             src="../../../static/icons/location.png"
             alt
           />
-          <span>东京大学</span>
+          <span>{{ getLocations }}</span>
           <img class="icon-down" src="../../../static/icons/down.png" alt />
         </div>
         <div class="home-operate-search" @tap="goSearchPage">
@@ -54,13 +54,15 @@
 </template>
 
 <script>
-import path from "../../utils/serverConfig";
 import homeBannerTpl from "../../components/home_banner_tpl/home_banner_tpl.vue";
 import homeModalsTpl from "../../components/home_modals_tpl/home_modals_tpl.vue";
 import homePreferenceTpl from "../../components/home_preference_tpl/home_preference_tpl.vue";
 import homeCardTpl from "../../components/home_card_tpl/home_card_tpl.vue";
 import homeSearchShop from "../../components/home_seach_shop_tpl/home_seach_shop_tpl.vue";
 
+import getGeo from "../../utils/getGeo";
+import actions from "vuex";
+import { mapGetters } from "vuex";
 export default {
   components: {
     homeBannerTpl,
@@ -70,16 +72,64 @@ export default {
     homeSearchShop
   },
   beforeMount() {
-    console.log(path);
-    console.log(this.$fly);
+    let self = this;
+    console.log(this.getLocations)
     this.$fly
-      .get(path.getIndexAd)
-      .then(res => {
-        console.log(res);
-      })
+      .all([self.getIndexAd(), self.getByMerchant()])
+      .then(self.$fly.spread((records, project)=>{
+        console.log(rescords);
+        console.log(project);
+      }))
       .catch(err => {
         console.log(err);
       });
+  },
+  mounted() {
+    let self = this;
+    wx.getSetting({
+      success: res => {
+        // console.log(res);
+        if (res.authSetting["scope.userLocation"] == undefined) {
+          getGeo();
+        } else if (res.authSetting["scope.userLocation"] == false) {
+          wx.showModal({
+            title: "请求授权当前位置",
+            content: "需要获取您的地理位置，请确认授权",
+            success(res) {
+              if (res.cancel) {
+                wx.showToast({
+                  title: "拒绝授权",
+                  icon: "none",
+                  duration: 1000
+                });
+              } else if (res.confirm) {
+                wx.openSetting({
+                  success: function(res) {
+                    if (res.authSetting["scope.userLocation"] == true) {
+                      wx.showToast({
+                        title: "授权成功",
+                        icon: "success",
+                        duration: 1000
+                      });
+                      //再次授权，调用wx.getLocation的API
+                      getGeo(self);
+                    } else {
+                      wx.showToast({
+                        title: "授权失败",
+                        icon: "none",
+                        duration: 1000
+                      });
+                    }
+                  }
+                });
+              }
+            }
+          });
+        } else {
+          getGeo(self);
+        }
+      }
+    });
   },
   data() {
     return {
@@ -400,8 +450,12 @@ export default {
           level: "4.0",
           type: 0
         }
-      ]
+      ],
+      location: "重新加载"
     };
+  },
+  computed: {
+    ...mapGetters(["getLocations"])
   },
   methods: {
     handleTabbar(index) {
@@ -438,6 +492,24 @@ export default {
         //   url: ''
         // });
       }
+    },
+    getIndexAd() {
+      return this.$fly.get("getIndexAd", {
+        adPlace: 1
+      });
+    },
+    getByMerchant() {
+      return this.$fly.get("findByMerchant", {
+        merchantType: "",
+        merchantProvince: "陕西省",
+        merchantCity: "西安市",
+        merchantLocation: "灞桥区",
+        range: "",
+        merchantName: "",
+        commentScore: "",
+        offset: 0,
+        limit: 100
+      });
     }
   }
 };
@@ -493,10 +565,14 @@ export default {
   height: 36rpx;
 }
 
-.home-operate-location span {
+.home-operate-location > span {
   font-size: 36rpx;
   color: #353535;
   margin: 0 16rpx;
+  width: 180rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .icon-down {
   width: 36rpx;

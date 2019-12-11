@@ -12,7 +12,7 @@
       <div class="input-modal" @tap="showCityModal">
         <div class="im_txt">地址</div>
         <div class="show-picker">
-          <div class="sp_txt">选择收货地址</div>
+          <div class="sp_txt">{{ region }}</div>
           <div class="sp_txt">></div>
         </div>
       </div>
@@ -22,7 +22,7 @@
       </div>
       <div class="input-modal">
         <div class="im_txt">详细地址</div>
-        <textarea placeholder="街道、楼牌号等" />
+        <textarea placeholder="街道、楼牌号等" v-model="address" />
       </div>
     </div>
     <div class="set">
@@ -34,7 +34,7 @@
         @change="changeSwitch"
       ></switch>
     </div>
-    <div class="save-btn">保存</div>
+    <div class="save-btn" @tap="saveReceiveAddress">保存</div>
     <div class="time-container" v-if="isShow">
       <div
         class="time-wrapper"
@@ -61,7 +61,7 @@
       ></div>
       <div class="region-box" :animation="gAnimation">
         <header>{{ regionTitle }}</header>
-        <picker-view class="region-p" @change="regionChange" :value="index">
+        <picker-view class="region-p" @change="regionChange" :value="initValue">
           <picker-view-column class="region-pvc">
             <div class="pvc_txt" v-for="(p, index) of provinces" :key="index">
               {{ p.name }}
@@ -89,6 +89,9 @@
 import datas from "../../../utils/region";
 
 export default {
+  onLoad() {
+    Object.assign(this.$data, this.$options.data());
+  },
   data() {
     return {
       userName: "",
@@ -120,13 +123,14 @@ export default {
       cIdx: 0,
       aIdx: 0,
       cities: [],
-      areas: []
+      areas: [],
+      address: "",
+      region: "选择收货地址"
     };
   },
   computed: {
     getCities() {
       let id = this.provinces[this.pIdx].id;
-      console.log(this.cIdx);
       return datas.cities[id];
     },
     getAreas() {
@@ -138,14 +142,12 @@ export default {
       let c = this.getCities[this.cIdx].name;
       let a = this.getAreas[this.aIdx].name;
       return `${p}${c}${a}`;
+    },
+    initValue() {
+      return [this.pIdx, this.cIdx, this.aIdx];
     }
   },
-  mounted() {
-    console.log(this.provinces);
-    console.log(this.cities);
-    console.log(this.areas);
-    console.log(datas);
-  },
+  mounted() {},
   methods: {
     // 动画
     doAnimation() {
@@ -204,20 +206,18 @@ export default {
       this.isChecked = e.mp.detail.value;
     },
     handleChange(e) {
-      this.index = e.target.value;
+      console.log(e);
+      this.index = e.target.value[0];
     },
     regionChange(e) {
-      console.log(e);
       if (this.pIdx != e.mp.detail.value[0]) {
         this.pIdx = e.mp.detail.value[0];
         this.cIdx = 0;
         this.aIdx = 0;
-      }else{
+      } else {
         this.cIdx = e.mp.detail.value[1];
         this.aIdx = e.mp.detail.value[2];
       }
-      console.log(this.cIdx)
-      console.log(this.aIdx)
     },
     showPickerModal() {
       this.isShow = true;
@@ -245,6 +245,47 @@ export default {
     confirmGetAddr() {
       this.hiddenGAnimation();
       this.isShowCity = false;
+      this.region = this.regionTitle;
+    },
+    saveReceiveAddress() {
+      let self = this;
+      console.log(self.userName);
+      console.log(self.phone);
+      console.log(self.pIdx);
+      console.log(self.cIdx);
+      console.log(self.aIdx);
+      console.log(self.address);
+      console.log(this.isChecked);
+      if (self.phone) {
+        if (self.address) {
+          this.$fly
+            .post("/getUserKeyWord", {
+              cUId: wx.getStorageSync("userId"),
+              addressName: self.userName,
+              addressPhone: self.phone,
+              addressProvince: datas.provinces[self.pIdx],
+              addressCity: datas.cities[self.cIdx],
+              addressDistrict: datas.areas[self.aIdx],
+              addressInfo: self.address,
+              addressAllowTime: self.timeTxt,
+              addressDefault: self.isChecked
+            })
+            .then(res => {})
+            .catch(err => {
+              console.log(err);
+            });
+        } else {
+          wx.showToast({
+            title: "请填写正确的收货地址",
+            icon: "none"
+          });
+        }
+      } else {
+        wx.showToast({
+          title: "请填写正确的手机号码",
+          icon: "none"
+        });
+      }
     }
   }
 };

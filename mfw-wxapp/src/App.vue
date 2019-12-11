@@ -1,5 +1,42 @@
 <script>
 export default {
+  beforeMount() {
+    let self = this;
+    let appId = "wx579653893a42166a";
+    let secret = "9184547d7ad46c9b6c97a6a4938a1f70";
+    wx.checkSession({
+      success: function(res) {
+        console.log('处于登录态---------->' + JSON.stringify(res));
+      },
+      fail: function(res) {
+        console.log("需要重新登录");
+        wx.login({
+          success(res) {
+            if (res.code) {
+              let url =
+                "https://api.weixin.qq.com/sns/jscode2session?appid=" +
+                appId +
+                "&secret=" +
+                secret +
+                "&js_code=" +
+                res.code +
+                "&grant_type=authorization_code";
+              self.$fly
+                .get(url)
+                .then(res => {
+                  console.log(res);
+                  wx.setStorageSync('openid',res.openid);
+                  wx.setStorageSync('session_key',res.session_key);
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+            }
+          }
+        });
+      }
+    });
+  },
   created() {
     // 调用API从本地缓存中获取数据
     /*
@@ -9,7 +46,6 @@ export default {
      * 百度：mpvue === swan, mpvuePlatform === 'swan'
      * 支付宝(蚂蚁)：mpvue === my, mpvuePlatform === 'my'
      */
-
     // let logs;
     // if (mpvuePlatform === "my") {
     //   logs = mpvue.getStorageSync({ key: "logs" }).data || [];

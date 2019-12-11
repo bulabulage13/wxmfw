@@ -4,28 +4,36 @@
       <div class="set-modal" @tap="changeUserPic">
         <div class="sm-left">头像</div>
         <div class="sm-right">
-          <img class="tx" :src="pic" />
+          <img class="tx" :src="userInfo.avatarUrl" />
           <img class="right" src="../../../../static/icons/right.png" />
         </div>
       </div>
       <div class="set-modal">
         <div class="sm-left">昵称</div>
         <div class="sm-right">
-          <input type="text" value="我是你大叔" />
+          <input
+            type="text"
+            v-model="userInfo.nickName"
+            @change="setUserName"
+          />
           <img class="right" src="../../../../static/icons/right.png" />
         </div>
       </div>
       <div class="set-modal">
         <div class="sm-left">性别</div>
         <div class="sm-right">
-          <div class="txt">男</div>
+          <div class="txt">
+            {{
+              userInfo.gender == 1 ? "男" : userInfo.gender == 2 ? "女" : "保密"
+            }}
+          </div>
           <img class="right" src="../../../../static/icons/right.png" />
         </div>
       </div>
       <div class="set-modal">
         <div class="sm-left">生日</div>
         <div class="sm-right" @tap="selDate">
-          <div class="txt">1995年8月21日</div>
+          <div class="txt">{{ birthDay }}</div>
           <img class="right" src="../../../../static/icons/right.png" />
         </div>
       </div>
@@ -37,7 +45,7 @@
         @tap.prevent="hiddenDateModal"
       ></div>
       <div class="date">
-        <picker-view @change="getHandleChange" value="years.length">
+        <picker-view @change="getHandleChange" :value="value">
           <picker-view-column>
             <div v-for="(y, index) of years" :key="index">{{ y }}年</div>
           </picker-view-column>
@@ -48,7 +56,9 @@
             <div v-for="(d, index) of days" :key="index">{{ d }}日</div>
           </picker-view-column>
         </picker-view>
-        <div class="close" @tap="hiddenDateModal"><img src="../../../../static/icons/delete.png"></div>
+        <div class="close" @tap="hiddenDateModal">
+          <img src="../../../../static/icons/delete.png" />
+        </div>
       </div>
     </div>
   </div>
@@ -64,13 +74,14 @@ export default {
       months: date.months,
       days: date.days,
       isShow: false,
-      animation: {}
+      animation: {},
+      userInfo: {},
+      value: [date.years.length, 0, 0],
+      birthDay: "请选择"
     };
   },
   mounted() {
-    console.log(date.years);
-    console.log(date.days);
-    console.log(date.months);
+    this.userInfo = wx.getStorageSync("userInfo");
   },
   methods: {
     preventD() {
@@ -82,12 +93,55 @@ export default {
         count: 1,
         sizeType: "compressed",
         success(res) {
+          console.log(res.tempFiles[0].path);
           self.pic = res.tempFiles[0].path;
+          self.userInfo.avatarUrl = res.tempFiles[0].path;
+          wx.setStorageSync("userInfo", self.userInfo);
+          wx.uploadFile({
+            url: "http://129.204.180.3:8090/setUserHeader",
+            filePath: res.tempFiles[0].path,
+            name: "file",
+            formData: { userId: wx.getStorageSync("openid") },
+            success(res) {
+              console.log(res);
+            },
+            fail(err) {
+              console.log(err);
+            }
+          });
         },
         fail(res) {
           console.log(res);
         }
       });
+    },
+    setUserName() {
+      let userName = this.userInfo.nickName;
+      let self = this;
+      this.$fly
+        .post("setUserName", {
+          userName: userName,
+          userId: wx.getStorageSync("userId")
+        })
+        .then(res => {
+          if (res.state == 0) {
+            wx.showToast({
+              title: "修改成功",
+              icon: "none",
+              duration: 3000
+            });
+            wx.setStorageSync("userInfo", self.userInfo);
+          } else {
+            wx.showToast({
+              title: "修改失败",
+              icon: "none",
+              duration: 3000
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     goAnimation() {
       let self = this;
@@ -113,16 +167,46 @@ export default {
         self.animation = animation.export();
       }, 200);
     },
-    selDate(){
+    selDate() {
       this.isShow = true;
       this.goAnimation();
     },
-    hiddenDateModal(e){
+    hiddenDateModal(e) {
+      let value = this.value;
+      let self = this;
       this.isShow = false;
       this.hiddenAnimation();
+      this.birthDay =
+        this.years[value[0]] +
+        "/" +
+        this.months[value[1]] +
+        "/" +
+        this.days[value[2]];
+      this.$fly
+        .post("setUserBirthday", {
+          userId: wx.getStorageSync("userId"),
+          userBirthday: self.birthDay
+        })
+        .then(res => {
+          if (res.state == 0) {
+            wx.showToast({
+              title: "出生年月日修改成功",
+              icon: "none"
+            });
+          } else {
+            wx.showToast({
+              title: "修改失败",
+              icon: "none"
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
-    getHandleChange(e){
+    getHandleChange(e) {
       console.log(e);
+      this.value = e.mp.detail.value;
     }
   }
 };
@@ -150,8 +234,10 @@ section {
   color: rgba(23, 23, 23, 1);
 }
 .sm-right {
+  flex: 1;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
 }
 .tx {
   width: 104rpx;
@@ -166,6 +252,7 @@ section {
 }
 .sm-right > input,
 .txt {
+  flex: 1;
   font-size: 28rpx;
   color: rgba(136, 136, 136, 1);
   text-align: right;
@@ -205,12 +292,12 @@ picker-view-column {
   color: #353535;
   line-height: 2.5;
 }
-.close{
+.close {
   position: absolute;
   top: 16rpx;
   right: 16rpx;
 }
-.close>img{
+.close > img {
   width: 32rpx;
   height: 32rpx;
 }

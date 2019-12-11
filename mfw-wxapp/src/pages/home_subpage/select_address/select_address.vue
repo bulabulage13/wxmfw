@@ -1,21 +1,23 @@
 <template>
   <div class="container">
-    <div class="select-top">
-      <div class="select-addr">
-        <span>地理位置</span>
-        <img src="../../../../static/icons/down.png" alt />
-      </div>
-      <i class="cross-axis"></i>
-      <div class="stdin-addr">
-        <input type="text" placeholder="小区/写字楼/学校等" />
+    <div class="sel-bar">
+      <div class="select-top">
+        <div class="select-addr">
+          <span>{{ city.city }}</span>
+          <img src="../../../../static/icons/down.png" alt />
+        </div>
+        <i class="cross-axis"></i>
+        <div class="stdin-addr">
+          <input type="text" placeholder="小区/写字楼/学校等" />
+        </div>
       </div>
     </div>
     <!-- 当前位置 -->
     <div class="current-address">
       <header>当前位置</header>
       <div class="current-place">
-        <div class="address-name">地理位置</div>
-        <div class="restart">
+        <div class="address-name">{{ getLocations }}</div>
+        <div class="restart" @tap="getGeo">
           <img src="../../../../static/icons/getloc.png" alt />
           <span>重新定位</span>
         </div>
@@ -45,27 +47,61 @@
     <div class="nearby-address">
       <header>附近地址</header>
       <ul class="nearby-address-list">
-        <li class="nearby-address-item">地址一</li>
-        <li class="nearby-address-item">地址二</li>
-        <li class="nearby-address-item">地址三</li>
+        <li
+          class="nearby-address-item"
+          v-for="(n, index) of nearby"
+          :key="index"
+          @tap="selAddress(index)"
+        >
+          {{ n.name }}
+        </li>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import actions from 'vuex';
+import getGeo from "../../../utils/getGeo";
 export default {
-    data(){
-        return {
-        }
+  data() {
+    return {};
+  },
+  methods: {
+    getGeo() {
+      getGeo(this);
+    },
+    selAddress(index) {
+      let n = this.nearby[index];
+      this.$store.dispatch('setCoords', n.adress);
+      this.$store.dispatch('getLoction', n.name);
+      wx.navigateBack({
+        detal: 1
+      })
     }
+  },
+  computed: {
+    ...mapGetters(["getLocations", "nearby", "city"])
+  }
 };
 </script>
 
 <style scoped>
+.container {
+  position: relative;
+}
+.sel-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  z-index: 99;
+}
 .select-top {
   margin: 16rpx 42rpx;
-  padding: 20rpx 24rpx;
+  padding: 10rpx 24rpx;
   background: #f5f5f5;
   border-radius: 48rpx;
   display: flex;
@@ -99,6 +135,7 @@ export default {
 }
 /* 当前位置 */
 .current-address {
+  margin-top: 98rpx;
   padding: 24rpx 42rpx 0;
   border-bottom: 1px solid #d2d2d2;
 }
@@ -141,7 +178,7 @@ export default {
 }
 .receive-address-item {
   padding: 18rpx 42rpx;
-  border-bottom: 2rpx solid #D2D2D2;
+  border-bottom: 2rpx solid #d2d2d2;
 }
 .receive-addr {
   font-size: 26rpx;
@@ -167,7 +204,7 @@ export default {
 }
 .nearby-address-item {
   padding: 16rpx 42rpx;
-  border-bottom: 2rpx solid #D2D2D2;
+  border-bottom: 2rpx solid #d2d2d2;
   font-size: 26rpx;
   color: #353535;
 }

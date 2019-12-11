@@ -3,12 +3,12 @@
     <div class="addresses">
       <div class="address">
         <div class="personal-data">
-          <div class="user-name">杨鹏飞</div>
-          <div class="user-phone">13112341234</div>
-          <div class="is-default">默认</div>
+          <div class="user-name">{{addInfo.addressName}}</div>
+          <div class="user-phone">{{addInfo.addressPhone}}</div>
+          <div class="is-default">{{addInfo.addressDefault?'默认':''}}</div>
         </div>
         <div class="addr">
-          <div class="addr-txt">西安市雁塔区吉祥村526号</div>
+          <div class="addr-txt">{{addInfo.addressProvince}}{{addInfo.addressCity}}{{addInfo.addressDistrict}}{{addInfo.addressInfo}}</div>
           <div class="addr-edit">
             <img src="" />
           </div>
@@ -21,13 +21,38 @@
 
 <script>
 export default {
-    methods:{
-        goAddAddressPage(){
-            wx.navigateTo({
-                url: '../receiving_address_add/main'
-            })
-        }
+  data(){
+    return{
+      addInfo:{
+        addressName:'杨鹏飞',
+        addressPhone: '13112341234',
+        addressProvince: '陕西省',
+        addressCity: '西安市',
+        addressDistrict: '灞桥区',
+        addressInfo: '什么路123号',
+        addressAllowTime: '周内',
+        addressDefault: true
+      }
     }
+  },
+  onShow() {
+    this.$fly.get('getAddressById',{
+      cUId: wx.getStorageSync('userId')
+    }).then(res=>{
+      console.log(res)
+    }).catch(err=>{
+      console.log(err)
+    })
+
+    this.addInfo.addressName = '周星驰'
+  },
+  methods: {
+    goAddAddressPage() {
+      wx.navigateTo({
+        url: "../receiving_address_add/main"
+      });
+    }
+  }
 };
 </script>
 
