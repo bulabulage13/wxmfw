@@ -1,14 +1,15 @@
+import * as types from './mutation-types'
 export default {
     getLoction({ commit }, location) {
-        commit('GET_LOCATION', location);
+        commit(types.GET_LOCATION, location);
     },
     getNearby({ commit }, pois) {
-        commit('GET_NEARBY', pois);
+        commit(types.GET_NEARBY, pois);
     },
     getCity({commit}, city){
-        commit('GET_CITY', city)
+        commit(types.GET_CITY, city)
     },
     setCoords({commit},coords){
-        commit('SET_COORDS', coords);
+        commit(types.SET_COORDS, coords);
     }
 }

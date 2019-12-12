@@ -7,7 +7,7 @@
       </div>
       <div class="right-box">
         <HomeBanner :bannerUrl="bannerUrl" />
-        <SellerCard :cards="cards" />
+        <SellerCard :cards="cards"/>
       </div>
     </div>
   </div>
@@ -619,19 +619,13 @@ export default {
         { name: "便利超市", isActive: false },
         { name: "便利超市", isActive: false },
         { name: "便利超市", isActive: false },
-        { name: "便利超市", isActive: false },
-        { name: "便利超市", isActive: false },
-        { name: "便利超市", isActive: false },
-        { name: "便利超市", isActive: false },
-        { name: "便利超市", isActive: false },
-        { name: "便利超市", isActive: false },
-        { name: "便利超市", isActive: false },
-        { name: "便利超市", isActive: false }
       ]
     };
   },
   watch: {},
-  methods: {}
+  methods: {
+
+  }
 };
 </script>
 

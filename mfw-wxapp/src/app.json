@@ -19,7 +19,8 @@
         "shop_detail_tuan/main",
         "food_refund_detail/main",
         "order_payment/main",
-        "order_payment_attach/main"
+        "order_payment_attach/main",
+        "shopping_car/main"
       ]
     },
     {

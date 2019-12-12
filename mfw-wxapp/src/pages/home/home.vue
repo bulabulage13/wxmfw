@@ -77,7 +77,7 @@ export default {
     this.$fly
       .all([self.getIndexAd(), self.getByMerchant()])
       .then(self.$fly.spread((records, project)=>{
-        console.log(rescords);
+        console.log(records);
         console.log(project);
       }))
       .catch(err => {
@@ -504,7 +504,9 @@ export default {
         merchantProvince: "陕西省",
         merchantCity: "西安市",
         merchantLocation: "灞桥区",
-        range: "",
+        merchantLat:'',
+        merchantLng: '',
+        rangeDouble: "",
         merchantName: "",
         commentScore: "",
         offset: 0,

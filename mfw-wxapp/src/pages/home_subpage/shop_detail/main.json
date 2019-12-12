@@ -1,3 +1,6 @@
 {
-    "navigationBarTitleText":"商家详情页面"
+    "navigationBarTitleText":"商家详情页面",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#723aff",
+    "navigationBarTextStyle": "white"
 }

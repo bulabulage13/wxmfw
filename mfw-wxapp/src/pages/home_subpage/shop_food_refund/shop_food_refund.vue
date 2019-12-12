@@ -5,7 +5,7 @@
     <div class="decode">
       <div class="decode-txt">6288 9789 4355</div>
       <div class="decode-box">
-        <img src="" alt="" />
+        <img src="../../../../static/icons/sel.png" />
       </div>
     </div>
     <!-- 退还内容 -->
@@ -22,16 +22,21 @@
         <span class="hr-txt_2">(1-3个工作日内退款到原支付方)</span>
       </div>
       <div class="hr-box">
-        <img src="" />
+        <img src="../../../../static/icons/sel.png" />
       </div>
     </div>
     <!-- 退款原因 -->
     <div class="header">退款原因 <span>(至少选一项)</span></div>
     <div class="why-refund">
-      <div class="wr-item">
-        <div class="wr-txt">预约不上</div>
-        <div class="wr-box">
-          <img src="" alt="" />
+      <div
+        class="wr-item"
+        v-for="(s, index) of reasons"
+        :key="index"
+        @tap="selReason(index)"
+      >
+        <div class="wr-txt">{{ s.text }}</div>
+        <div class="wr-box" :class="s.isSelect ? 'wr-box-active' : ''">
+          <img src="../../../../static/icons/sel.png" />
         </div>
       </div>
     </div>
@@ -44,11 +49,56 @@
 
 <script>
 export default {
-  methods:{
-    goFoodRefundDetail(){
+  data() {
+    return {
+      reasons: [
+        {
+          text: "预约不上",
+          isSelect: false
+        },
+        {
+          text: "商家营业但不接待",
+          isSelect: false
+        },
+        {
+          text: "店里活动更优惠",
+          isSelect: false
+        },
+        {
+          text: "商家停业/装修/转让",
+          isSelect: false
+        },
+        {
+          text: "去过了，不太满意",
+          isSelect: false
+        },
+        {
+          text: "预约不上",
+          isSelect: false
+        },
+        {
+          text: "预约不上",
+          isSelect: false
+        },
+        {
+          text: "预约不上",
+          isSelect: false
+        },
+        {
+          text: "预约不上",
+          isSelect: false
+        }
+      ]
+    };
+  },
+  methods: {
+    selReason(index) {
+      this.reasons[index].isSelect = !this.reasons[index].isSelect;
+    },
+    goFoodRefundDetail() {
       wx.navigateTo({
-        url: '../food_refund_detail/main'
-      })
+        url: "../food_refund_detail/main"
+      });
     }
   }
 };
@@ -151,16 +201,21 @@ export default {
   color: #353535;
   margin-left: 14rpx;
 }
-.wr-box > img {
+.wr-box {
   width: 34rpx;
   height: 34rpx;
   border: 2rpx solid #b2b2b2;
   margin-right: 14rpx;
 }
+.wr-box > img {
+  width: 100%;
+  height: 100%;
+}
 .wr-box-active {
   width: 34rpx;
   height: 34rpx;
-  border: 2rpx solid #723AFF;
+  border: 2rpx solid #723aff;
+  background: #723aff;
 }
 /* btn */
 .refund-btn {

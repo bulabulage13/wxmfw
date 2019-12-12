@@ -33,7 +33,7 @@
         <img src="../../../../static/my/user.png" />
         <div class="eval-cont">
           <div class="user">
-            <div class="uname">什么什么</div>
+            <div class="uname">杨鹏飞</div>
             <div class="time">2019.07.08</div>
           </div>
           <div class="eval-txt">这是评论内容</div>
@@ -164,7 +164,7 @@ export default {
   color: #b2b2b2;
   margin-right: 18rpx;
 }
-.s-txt2 {
+.s_txt2 {
   font-weight: bold;
   color: #363636;
 }

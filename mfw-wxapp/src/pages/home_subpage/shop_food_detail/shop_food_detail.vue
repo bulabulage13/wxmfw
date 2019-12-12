@@ -59,22 +59,26 @@
     <div class="shop-intro">
       <header>餐厅介绍</header>
       <div class="shop-box">
-        <img src="" alt="" />
+        <img src="../../../../static/home/bj.png" alt="" />
         <div class="shop-detail">
-          <div class="shop-name"></div>
+          <div class="shop-name">Cheney kitchen</div>
           <div class="shop-level">
             <div class="shop-level_imgs">
-              <img src="" alt="" />
+              <img src="../../../../static/icons/level.png"/>
+              <img src="../../../../static/icons/level.png"/>
+              <img src="../../../../static/icons/level.png"/>
+              <img src="../../../../static/icons/level.png"/>
+              <img src="../../../../static/icons/level.png"/>
             </div>
-            <span></span>
+            <span>5.0</span>
           </div>
           <div class="work-time">
-            <img src="" alt="" />
-            <div class="work-time_txt"></div>
+            <img src="../../../../static/icons/time.png"/>
+            <div class="work-time_txt">营业时间11:00-22:00</div>
           </div>
           <div class="shop-loc">
-            <img src="" alt="" />
-            <div class="shop-loc_txt"></div>
+            <img src="../../../../static/icons/s_loc.png"/>
+            <div class="shop-loc_txt">长湖路天龙悦酒店1楼1层</div>
           </div>
         </div>
       </div>
@@ -197,7 +201,7 @@ export default {
 }
 .sub {
   font-size: 40rpx;
-  font-weight: bottom;
+  font-weight: bold;
   color: rgba(53, 53, 53, 1);
 }
 
@@ -206,9 +210,9 @@ export default {
 .prompt > header,
 .shop-intro > header {
   font-size: 36rpx;
+  font-weight: bold;
   color: #353535;
   margin-bottom: 16rpx;
-  background: #eee;
 }
 .food-cont {
   margin-bottom: 34rpx;
@@ -263,7 +267,6 @@ export default {
   width: 188rpx;
   height: 188rpx;
   margin-right: 38rpx;
-  background: #eee;
   flex-shrink: 0;
 }
 .shop-detail {
@@ -272,7 +275,6 @@ export default {
 .shop-name {
   font-size: 34rpx;
   color: rgba(53, 53, 53, 1);
-  background: #eee;
 }
 .shop-level {
   display: flex;
@@ -294,7 +296,7 @@ export default {
 }
 .work-time_txt,
 .shop-loc_txt {
-  font-size: 13rpx;
+  font-size: 26rpx;
   color: #353535;
 }
 .work-time > img,
@@ -302,7 +304,6 @@ export default {
   width: 40rpx;
   height: 40rpx;
   margin-right: 20rpx;
-  background: #eee;
 }
 /* 底部 */
 .pay {

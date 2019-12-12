@@ -29,6 +29,7 @@ export default {
 
 <style scoped>
 .left-tab {
+  width: 150rpx;
   height: 100%;
   position: fixed;
   top: 50rpx;

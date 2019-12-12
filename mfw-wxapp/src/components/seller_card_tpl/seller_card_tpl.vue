@@ -1,6 +1,6 @@
 <template>
   <scroll-view class="seller-cards">
-    <div class="seller-card" v-for="(card, index) of cards" :key="index">
+    <div class="seller-card" v-for="(card, index) of cards" :key="index" @tap="goShopDetail(index)">
       <img class="seller-card-logo" src="../../../static/home/qxc.png" />
       <div class="seller-card-detail">
         <header class="seller-card-name">{{card.name}}</header>
@@ -26,7 +26,15 @@
 
 <script>
 export default {
-  props: ["cards"]
+  props: ["cards"],
+  methods: {
+    goShopDetail(index) {
+      console.log(index);
+      wx.navigateTo({
+        url:"../home_subpage/shop_detail/main"
+      })
+    },
+  },
 };
 </script>
 

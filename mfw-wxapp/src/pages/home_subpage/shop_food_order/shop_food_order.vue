@@ -20,7 +20,10 @@
           </div>
         </div>
       </div>
-      <div class="price">￥500</div>
+      <div class="price">
+        <span>￥500</span>
+        <img src="../../../../static/icons/right.png">
+      </div>
     </div>
     <!-- 当前位置 -->
     <div class="current-location">
@@ -33,7 +36,7 @@
           <div class="addr">
             南宁市青秀区长湖路天龙湾悦酒店1楼天龙湾悦酒店1楼
           </div>
-          <img src="" />
+          <img src="../../../../static/icons/p.png" />
         </div>
       </div>
     </div>
@@ -136,8 +139,14 @@ export default {
   margin: 0 18rpx;
 }
 .price {
+  display: flex;
+  align-items: center;
   font-size: 26rpx;
   color: #353535;
+}
+.price>img{
+  width: 32rpx;
+  height: 32rpx;
 }
 /* 当前位置 */
 .current-location {
@@ -148,6 +157,7 @@ export default {
 .current-location > header {
   padding-bottom: 10rpx;
   border-bottom: 2rpx solid #d2d2d2;
+  font-weight: bold;
 }
 .shop-loc {
   display: flex;
@@ -191,6 +201,7 @@ export default {
 }
 .food > header {
   font-size: 28rpx;
+  font-weight: bold;
   color: #353535;
   padding: 18rpx 0;
   margin: 0 10rpx;
@@ -221,6 +232,7 @@ export default {
 }
 .decode > header {
   font-size: 28rpx;
+  font-weight: bold;
   color: #353535;
   padding: 18rpx 0;
   margin: 0 10rpx;
@@ -235,7 +247,6 @@ export default {
 .d-detail > img {
   width: 320rpx;
   height: 320rpx;
-  background: #eee;
   margin-bottom: 8rpx;
 }
 .d-code {

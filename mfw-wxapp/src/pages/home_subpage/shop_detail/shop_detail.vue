@@ -6,7 +6,7 @@
         <div class="ss-detail">
           <div class="shop-name">姑奶奶糯米饭</div>
           <div class="shop-time">
-            <img src="" />
+            <img src="../../../../static/icons/time.png" />
             <span>配送约43分钟</span>
           </div>
           <div class="notice">
@@ -46,104 +46,16 @@
           <div class="food-content">
             <header>奶奶的套餐</header>
             <ul class="foods-list">
-              <li class="food" @tap="goWmDetailPage">
+              <li class="food" @tap.stop="goWmDetailPage" v-for="(f,index) of foods" :key="index">
                 <img src="../../../../static/home/bj.png" />
                 <div class="food-detail">
-                  <div class="food-name">经典糯米饭</div>
-                  <div class="food-txt">秘制扣肉糯米饭什么什么什么什么的</div>
-                  <div class="food-txt">月售 25</div>
-                  <div class="food-price">￥<span>19.99</span></div>
-                  <div class="food-add"><img src="" /></div>
-                </div>
-              </li>
-              <li class="food" @tap="goTgDetailPage">
-                <img src="../../../../static/home/bj.png" />
-                <div class="food-detail">
-                  <div class="food-name">经典糯米饭</div>
-                  <div class="food-txt">秘制扣肉糯米饭什么什么什么什么的</div>
-                  <div class="food-txt">月售 25</div>
-                  <div class="food-price">￥<span>19.99</span></div>
-                  <div class="food-add"><img src="" /></div>
-                </div>
-              </li>
-              <li class="food">
-                <img src="../../../../static/home/bj.png" />
-                <div class="food-detail">
-                  <div class="food-name">经典糯米饭</div>
-                  <div class="food-txt">秘制扣肉糯米饭什么什么什么什么的</div>
-                  <div class="food-txt">月售 25</div>
-                  <div class="food-price">￥<span>19.99</span></div>
-                  <div class="food-add"><img src="" /></div>
-                </div>
-              </li>
-              <li class="food">
-                <img src="../../../../static/home/bj.png" />
-                <div class="food-detail">
-                  <div class="food-name">经典糯米饭</div>
-                  <div class="food-txt">秘制扣肉糯米饭什么什么什么什么的</div>
-                  <div class="food-txt">月售 25</div>
-                  <div class="food-price">￥<span>19.99</span></div>
-                  <div class="food-add"><img src="" /></div>
-                </div>
-              </li>
-              <li class="food">
-                <img src="../../../../static/home/bj.png" />
-                <div class="food-detail">
-                  <div class="food-name">经典糯米饭</div>
-                  <div class="food-txt">秘制扣肉糯米饭什么什么什么什么的</div>
-                  <div class="food-txt">月售 25</div>
-                  <div class="food-price">￥<span>19.99</span></div>
-                  <div class="food-add"><img src="" /></div>
-                </div>
-              </li>
-              <li class="food">
-                <img src="../../../../static/home/bj.png" />
-                <div class="food-detail">
-                  <div class="food-name">经典糯米饭</div>
-                  <div class="food-txt">秘制扣肉糯米饭什么什么什么什么的</div>
-                  <div class="food-txt">月售 25</div>
-                  <div class="food-price">￥<span>19.99</span></div>
-                  <div class="food-add"><img src="" /></div>
-                </div>
-              </li>
-              <li class="food">
-                <img src="../../../../static/home/bj.png" />
-                <div class="food-detail">
-                  <div class="food-name">经典糯米饭</div>
-                  <div class="food-txt">秘制扣肉糯米饭什么什么什么什么的</div>
-                  <div class="food-txt">月售 25</div>
-                  <div class="food-price">￥<span>19.99</span></div>
-                  <div class="food-add"><img src="" /></div>
-                </div>
-              </li>
-              <li class="food">
-                <img src="../../../../static/home/bj.png" />
-                <div class="food-detail">
-                  <div class="food-name">经典糯米饭</div>
-                  <div class="food-txt">秘制扣肉糯米饭什么什么什么什么的</div>
-                  <div class="food-txt">月售 25</div>
-                  <div class="food-price">￥<span>19.99</span></div>
-                  <div class="food-add"><img src="" /></div>
-                </div>
-              </li>
-              <li class="food">
-                <img src="../../../../static/home/bj.png" />
-                <div class="food-detail">
-                  <div class="food-name">经典糯米饭</div>
-                  <div class="food-txt">秘制扣肉糯米饭什么什么什么什么的</div>
-                  <div class="food-txt">月售 25</div>
-                  <div class="food-price">￥<span>19.99</span></div>
-                  <div class="food-add"><img src="" /></div>
-                </div>
-              </li>
-              <li class="food">
-                <img src="../../../../static/home/bj.png" />
-                <div class="food-detail">
-                  <div class="food-name">经典糯米饭</div>
-                  <div class="food-txt">秘制扣肉糯米饭什么什么什么什么的</div>
-                  <div class="food-txt">月售 25</div>
-                  <div class="food-price">￥<span>19.99</span></div>
-                  <div class="food-add"><img src="" /></div>
+                  <div class="food-name">{{f.name}}</div>
+                  <div class="food-txt">{{f.content}}</div>
+                  <div class="food-txt">月售 {{f.count}}</div>
+                  <div class="food-price">￥<span>{{f.price}}</span></div>
+                  <div class="food-add" @tap.stop="addFood(index)">
+                    <img src="../../../../static/icons/add.png" />
+                  </div>
                 </div>
               </li>
             </ul>
@@ -152,7 +64,7 @@
       </div>
     </div>
     <div class="shop-bottom">
-      <img src="" />
+      <img src="" @tap="goShoppingCar"/>
       <div class="s-left">另需配送费￥4</div>
       <div class="s-right">20元起送</div>
     </div>
@@ -161,6 +73,83 @@
 
 <script>
 export default {
+  mounted(){
+    wx.setNavigationBarTitle({
+      title: "你奶奶的糯米饭"
+    })
+  },
+  data() {
+    return {
+      foods: [
+        {
+          name: "经典糯米饭",
+          content: "秘制扣肉糯米饭经典回味无穷让你想吃越想吃",
+          count: 30,
+          price: 19.99
+        },
+        {
+          name: "经典糯米饭",
+          content: "秘制扣肉糯米饭经典回味无穷让你想吃越想吃",
+          count: 30,
+          price: 19.99
+        },
+        {
+          name: "经典糯米饭",
+          content: "秘制扣肉糯米饭经典回味无穷让你想吃越想吃",
+          count: 30,
+          price: 19.99
+        },
+        {
+          name: "经典糯米饭",
+          content: "秘制扣肉糯米饭经典回味无穷让你想吃越想吃",
+          count: 30,
+          price: 19.99
+        },
+        {
+          name: "经典糯米饭",
+          content: "秘制扣肉糯米饭经典回味无穷让你想吃越想吃",
+          count: 30,
+          price: 19.99
+        },
+        {
+          name: "经典糯米饭",
+          content: "秘制扣肉糯米饭经典回味无穷让你想吃越想吃",
+          count: 30,
+          price: 19.99
+        },
+        {
+          name: "经典糯米饭",
+          content: "秘制扣肉糯米饭经典回味无穷让你想吃越想吃",
+          count: 30,
+          price: 19.99
+        },
+        {
+          name: "经典糯米饭",
+          content: "秘制扣肉糯米饭经典回味无穷让你想吃越想吃",
+          count: 30,
+          price: 19.99
+        },
+        {
+          name: "经典糯米饭",
+          content: "秘制扣肉糯米饭经典回味无穷让你想吃越想吃",
+          count: 30,
+          price: 19.99
+        },
+        {
+          name: "经典糯米饭",
+          content: "秘制扣肉糯米饭经典回味无穷让你想吃越想吃",
+          count: 30,
+          price: 19.99
+        },
+        {
+          name: "经典糯米饭",
+          content: "秘制扣肉糯米饭经典回味无穷让你想吃越想吃",
+          count: 30,
+          price: 19.99
+        },
+      ]
+    };
+  },
   methods: {
     goWmDetailPage() {
       wx.navigateTo({
@@ -171,6 +160,14 @@ export default {
       wx.navigateTo({
         url: "../shop_food_detail_tg/main"
       });
+    },
+    addFood(index){
+      console.log(index)
+    },
+    goShoppingCar(){
+      wx.navigateTo({
+        url: '../shopping_car/main'
+      })
     }
   }
 };
@@ -389,7 +386,6 @@ export default {
 .food-add > img {
   width: 32rpx;
   height: 32rpx;
-  background: #723aff;
 }
 
 /* 底部 */

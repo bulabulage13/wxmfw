@@ -2,54 +2,41 @@
   <div class="container">
     <!-- 商品简介 -->
     <div class="shop-intro">
-      <header>Cheney kitchen</header>
+      <header>{{ shopDetail.name }}</header>
       <div class="shop-level">
         <div class="shop-level_star">
-          <img src="../../../../static/icons/star.png" alt="" />
-          <img src="../../../../static/icons/star.png" alt="" />
-          <img src="../../../../static/icons/star.png" alt="" />
-          <img src="../../../../static/icons/star.png" alt="" />
-          <img src="../../../../static/icons/star.png" alt="" />
+          <img
+            v-for="(s, index) of shopDetail.stars"
+            :key="index"
+            src="../../../../static/icons/level.png"
+          />
         </div>
-        <div class="shop-level_txt">5.0</div>
+        <div class="shop-level_txt">{{ shopDetail.stars }}</div>
       </div>
       <div class="shop-intro_img">
         <!-- next-margin -->
         <swiper
-          display-multiple-items="2.5"
+          display-multiple-items="2"
           next-margin="120rpx"
           previous-margin="40rpx"
         >
-          <swiper-item>
-            <img src="../../../../static/banner/shop.png" alt="" />
-          </swiper-item>
-          <swiper-item>
-            <img src="../../../../static/banner/shop.png" alt="" />
-          </swiper-item>
-          <swiper-item>
-            <img src="../../../../static/banner/shop.png" alt="" />
-          </swiper-item>
-          <swiper-item>
-            <img src="../../../../static/banner/shop.png" alt="" />
+          <swiper-item v-for="(b, index) of shopDetail.imgs" :key="index">
+            <img :src="b" />
           </swiper-item>
         </swiper>
       </div>
       <ul class="shop-intro_list">
         <li class="shop-intro_item">
-          <img src="../../../../static/icons/star.png" alt="" />
-          <span>营业时间11:00——22:00</span>
+          <img src="../../../../static/icons/time.png" alt="" />
+          <span>{{ shopDetail.time }}</span>
         </li>
         <li class="shop-intro_item">
-          <img src="../../../../static/icons/star.png" alt="" />
-          <span>营业时间11:00——22:00</span>
+          <img src="../../../../static/icons/s_loc.png" alt="" />
+          <span>{{ shopDetail.addr }}</span>
         </li>
         <li class="shop-intro_item">
-          <img src="../../../../static/icons/star.png" alt="" />
-          <span>营业时间11:00——22:00</span>
-        </li>
-        <li class="shop-intro_item">
-          <img src="../../../../static/icons/star.png" alt="" />
-          <span>营业时间11:00——22:00</span>
+          <img src="../../../../static/icons/p.png" alt="" />
+          <span>{{ shopDetail.phone }}</span>
         </li>
       </ul>
       <div class="shop-type">
@@ -59,31 +46,22 @@
     </div>
     <!-- 堂食套餐 -->
     <div class="ts">
-      <div class="ts-item" @tap="goFoodDetail">
-        <img src="" />
+      <div
+        class="ts-item"
+        v-for="(wm, index) of shopDetail.wms"
+        :key="index"
+        @tap="goFoodDetail"
+      >
+        <img :src="wm.img" />
         <div class="ts-item_intro">
-          <header>套餐名称</header>
+          <header>{{ wm.name }}</header>
           <div class="time">
-            <span></span>
-            <span></span>
+            <span>{{ wm.time }}</span>
+            <span>免预约</span>
           </div>
           <div class="price">
-            <span class="curr-price">￥</span>
-            <span class="cost-price">￥</span>
-          </div>
-        </div>
-      </div>
-      <div class="ts-item">
-        <img src="" />
-        <div class="ts-item_intro">
-          <header>套餐名称</header>
-          <div class="time">
-            <span></span>
-            <span></span>
-          </div>
-          <div class="price">
-            <span class="curr-price">￥</span>
-            <span class="cost-price">￥</span>
+            <span class="curr-price">￥{{ wm.nowPrice }}</span>
+            <span class="cost-price">￥{{ wm.oldPrice }}</span>
           </div>
         </div>
       </div>
@@ -91,16 +69,16 @@
     <!-- 精选评论 -->
     <div class="commont">
       <header>
-        <div class="commont-count">精选评论()</div>
+        <div class="commont-count">精选评论(99)</div>
         <div class="">></div>
       </header>
       <section class="commont-item">
         <header>
           <div class="user">
-            <img src="" alt="" />
+            <img src="../../../../static/images/user.png" />
             <div class="user-name">催景博</div>
           </div>
-          <div class="date"></div>
+          <div class="date">2019.07.03</div>
         </header>
         <div class="commont-item_cont">
           的撒范德萨的撒范德萨啊分撒的撒旦的撒范德萨的撒范德萨啊分撒的撒旦的撒范德萨的撒范德萨啊分撒的撒旦的撒范德萨的撒范德萨啊分撒的撒旦
@@ -114,17 +92,50 @@
 
 <script>
 export default {
-  data() {},
+  data() {
+    return {
+      shopDetail: {
+        imgs: [
+          "../../../static/banner/shop.png",
+          "../../../static/banner/shop.png",
+          "../../../static/banner/shop.png",
+          "../../../static/banner/shop.png",
+          "../../../static/banner/shop.png"
+        ],
+        name: "Cheney kitchen",
+        stars: 5.0,
+        time: "11:00-22:00",
+        addr: "长湖路天龙湾悦酒店1楼1层",
+        phone: "18812351235",
+        wms: [
+          {
+            name: "精致双人套餐",
+            time: "周一至周五",
+            oldPrice: "666",
+            nowPrice: "555",
+            img: "../../../static/home/mp.png"
+          },
+          {
+            name: "精致双人套餐",
+            time: "周一至周五",
+            oldPrice: "666",
+            nowPrice: "555",
+            img: "../../../static/home/mp.png"
+          }
+        ]
+      }
+    };
+  },
   mounted() {
     wx.setNavigationBarTitle({
       title: "Cheney kitchen"
     });
   },
-  methods:{
-    goFoodDetail(){
+  methods: {
+    goFoodDetail() {
       wx.navigateTo({
-        url:'../shop_food_detail/main'
-      })
+        url: "../shop_food_detail/main"
+      });
     }
   }
 };
@@ -183,6 +194,8 @@ swiper-item > img {
   background: #fff;
 }
 .shop-intro_item {
+  display: flex;
+  align-items: center;
   padding: 10rpx 0;
   border-bottom: 2rpx solid #ededed;
   color: #353535;
@@ -229,27 +242,24 @@ swiper-item > img {
   width: 140rpx;
   height: 140rpx;
   margin-right: 20rpx;
-  background: #eee;
   flex-shrink: 0;
 }
 .ts-item_intro {
-  background: #eee;
   flex: 1;
 }
 .ts-item_intro > header {
   font-size: 32rpx;
+  font-weight: bold;
   color: rgba(53, 53, 53, 1);
 }
 .time {
   font-size: 26rpx;
   color: #b2b2b2;
   margin: 24rpx 0 6rpx 0;
-  background: #eee;
 }
 .price {
   display: flex;
   align-items: center;
-  background: #eee;
 }
 .curr-price {
   color: #723aff;
@@ -263,7 +273,7 @@ swiper-item > img {
 }
 /* 精选评论 */
 .commont {
-  padding: 0 40rpx;
+  padding: 18rpx 40rpx;
   background: #fff;
   margin-bottom: 88rpx;
 }
@@ -271,9 +281,8 @@ swiper-item > img {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16rpx 0 12rpx;
+  padding: 0 0 12rpx;
   border-bottom: 2rpx solid #ededed;
-  background: #eee;
 }
 .commont-count {
   font-size: 32rpx;
@@ -296,25 +305,19 @@ swiper-item > img {
   width: 64rpx;
   height: 64rpx;
   margin-right: 14rpx;
-  background: #eee;
 }
 .user-name {
   font-size: 28rpx;
   color: #ffab3a;
 }
 .date {
-  width: 102rpx;
-  height: 32rpx;
-  line-height: 32rpx;
   font-size: 22rpx;
   color: #b2b2b2;
-  background: #eee;
 }
 .commont-item_cont {
   margin-left: 78rpx;
   font-size: 26rpx;
   color: #353535;
-  background: #eee;
   flex-wrap: wrap;
 }
 .btn-discuss {
