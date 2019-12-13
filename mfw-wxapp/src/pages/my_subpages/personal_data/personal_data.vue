@@ -101,7 +101,7 @@ export default {
             url: "http://129.204.180.3:8090/setUserHeader",
             filePath: res.tempFiles[0].path,
             name: "file",
-            formData: { userId: wx.getStorageSync("openid") },
+            formData: { userId: wx.getStorageSync("userId") },
             success(res) {
               console.log(res);
             },

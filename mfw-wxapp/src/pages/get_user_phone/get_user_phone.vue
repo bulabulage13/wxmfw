@@ -66,6 +66,7 @@ export default {
         .then(res => {
           if (res.state == 0) {
             wx.setStorageSync("isUserPhone", true);
+            wx.setStorageSync('userId', res.list.userId)
             wx.reLaunch({
               url: "../my/main"
             });

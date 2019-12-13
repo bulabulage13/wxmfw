@@ -1,16 +1,21 @@
 <template>
   <div class="container">
-    <div class="addresses">
+    <div class="addresses" v-for="(addr,index) of addInfo" :key="index">
       <div class="address">
         <div class="personal-data">
-          <div class="user-name">{{addInfo.addressName}}</div>
-          <div class="user-phone">{{addInfo.addressPhone}}</div>
-          <div class="is-default">{{addInfo.addressDefault?'默认':''}}</div>
+          <div class="user-name">{{ addr.addressName }}</div>
+          <div class="user-phone">{{ addr.addressPhone }}</div>
+          <div class="is-default">
+            {{ addr.addressDefault == 1 ? "默认" : "" }}
+          </div>
         </div>
         <div class="addr">
-          <div class="addr-txt">{{addInfo.addressProvince}}{{addInfo.addressCity}}{{addInfo.addressDistrict}}{{addInfo.addressInfo}}</div>
+          <div class="addr-txt">
+            {{ addr.addressProvince }}{{ addr.addressCity
+            }}{{ addr.addressDistrict }}{{ addr.addressInfo }}
+          </div>
           <div class="addr-edit">
-            <img src="" />
+            <img src="../../../../static/icons/edit.png" />
           </div>
         </div>
       </div>
@@ -21,30 +26,29 @@
 
 <script>
 export default {
-  data(){
-    return{
-      addInfo:{
-        addressName:'杨鹏飞',
-        addressPhone: '13112341234',
-        addressProvince: '陕西省',
-        addressCity: '西安市',
-        addressDistrict: '灞桥区',
-        addressInfo: '什么路123号',
-        addressAllowTime: '周内',
-        addressDefault: true
-      }
-    }
+  data() {
+    return {
+      addInfo: [],
+      noList: true
+    };
   },
   onShow() {
-    this.$fly.get('getAddressById',{
-      cUId: wx.getStorageSync('userId')
-    }).then(res=>{
-      console.log(res)
-    }).catch(err=>{
-      console.log(err)
-    })
-
-    this.addInfo.addressName = '周星驰'
+    let self = this;
+    this.$fly
+      .get("getAddressById", {
+        cUId: wx.getStorageSync("userId")
+      })
+      .then(res => {
+        if (res.state == 0) {
+          self.noList = false;
+          self.addInfo = res.list;
+        } else {
+          self.noList = true;
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
   methods: {
     goAddAddressPage() {
@@ -108,7 +112,6 @@ export default {
 .addr-edit > img {
   width: 32rpx;
   height: 32rpx;
-  background: #eee;
   margin-right: 28rpx;
 }
 .add-btn {

@@ -202,11 +202,9 @@ export default {
       return;
     },
     changeSwitch(e) {
-      console.log(e);
       this.isChecked = e.mp.detail.value;
     },
     handleChange(e) {
-      console.log(e);
       this.index = e.target.value[0];
     },
     regionChange(e) {
@@ -255,22 +253,25 @@ export default {
       console.log(self.cIdx);
       console.log(self.aIdx);
       console.log(self.address);
-      console.log(this.isChecked);
+      console.log(self.getCities);
+      console.log(self.getAreas);
       if (self.phone) {
         if (self.address) {
           this.$fly
-            .post("/getUserKeyWord", {
+            .post("/saveAddress", {
               cUId: wx.getStorageSync("userId"),
               addressName: self.userName,
               addressPhone: self.phone,
-              addressProvince: datas.provinces[self.pIdx],
-              addressCity: datas.cities[self.cIdx],
-              addressDistrict: datas.areas[self.aIdx],
+              addressProvince: datas.provinces[self.pIdx].name,
+              addressCity: self.getCities[self.cIdx].name,
+              addressDistrict: self.getAreas[self.aIdx].name,
               addressInfo: self.address,
-              addressAllowTime: self.timeTxt,
-              addressDefault: self.isChecked
+              addressAllowTime: self.index,
+              addressDefault: self.isChecked ? 1 : 0
             })
-            .then(res => {})
+            .then(res => {
+              console.log(res);
+            })
             .catch(err => {
               console.log(err);
             });
